@@ -1,0 +1,37 @@
+version: 1
+screens:
+  - id: home
+    container:
+      type: vertical
+      spacing: 16
+      padding:
+        top: 24
+        bottom: 24
+        leading: 16
+        trailing: 16
+    shards:
+      - type: CardView
+        id: card_balance
+        props:
+          title: "Saldo disponível"
+          backgroundColor: "#FFFFFF"
+          cornerRadius: 12
+          textColor: "#1A1A1A"
+      - type: ShortcutsChain
+        id: shortcuts
+        props:
+          label: "Minha Rede"
+  - id: detail
+    container:
+      type: horizontal
+      spacing: 8
+      padding:
+        top: 16
+        bottom: 16
+        leading: 16
+        trailing: 16
+    shards:
+      - type: BannerView
+        id: banner_1
+        props:
+          height: 180

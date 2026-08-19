@@ -1,0 +1,4 @@
+screens:
+  - id: home
+    container:
+      type: vertical
