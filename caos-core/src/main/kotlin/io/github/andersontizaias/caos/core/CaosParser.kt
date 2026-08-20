@@ -1,15 +1,15 @@
 package io.github.andersontizaias.caos.core
 
 /**
- * Parseia arquivos de schema YAML v1 do Caos.
- * Usa apenas a stdlib do Kotlin — sem dependências de terceiros.
+ * Parses Caos YAML v1 schema files.
+ * Uses only the Kotlin stdlib — no third-party dependencies.
  */
 public object CaosParser {
     private const val SUPPORTED_VERSION = 1
 
     /**
-     * Parseia o conteúdo YAML e retorna um [CaosSchema].
-     * Lança [CaosParseException] se o conteúdo for inválido.
+     * Parses the YAML content and returns a [CaosSchema].
+     * Throws [CaosParseException] if the content is invalid.
      */
     @Suppress("ThrowsCount")
     public fun parse(content: String): CaosSchema {

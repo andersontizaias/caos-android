@@ -1,6 +1,6 @@
 package io.github.andersontizaias.caos.core
 
-/** Um shard declarado no YAML. */
+/** A shard declared in the YAML. */
 public data class CaosShard(
     val type: String,
     val id: String = "",

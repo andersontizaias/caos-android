@@ -5,10 +5,10 @@ import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.staticCompositionLocalOf
 
 /**
- * `CaosScreenView` provê este valor via [CompositionLocalProvider] para toda a árvore de shards
- * descendente — não há acesso a um [CaosStore] antes de um `CaosScreenView` ser composto.
+ * `CaosScreenView` provides this value via [CompositionLocalProvider] to the whole descendant
+ * shard tree — there's no access to a [CaosStore] before a `CaosScreenView` is composed.
  */
 public val LocalCaosStore: ProvidableCompositionLocal<CaosStore> =
     staticCompositionLocalOf {
-        error("LocalCaosStore não foi provido — CaosScreenView deve envolver a árvore de shards.")
+        error("LocalCaosStore was not provided — CaosScreenView must wrap the shard tree.")
     }

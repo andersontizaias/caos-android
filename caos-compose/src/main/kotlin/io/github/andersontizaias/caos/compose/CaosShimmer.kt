@@ -15,12 +15,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 /**
- * Aplica um efeito shimmer de carregamento. Usa apenas o sistema de animação do Compose — sem
- * `Canvas` customizado além do `drawWithContent` necessário pro overlay.
+ * Applies a loading shimmer effect. Uses only Compose's animation system — no custom `Canvas`
+ * beyond the `drawWithContent` needed for the overlay.
  *
- * Uso:
+ * Usage:
  * ```kotlin
- * Text("Carregando...", modifier = Modifier.caosShimmer(isActive = isLoading))
+ * Text("Loading...", modifier = Modifier.caosShimmer(isActive = isLoading))
  * ```
  */
 public fun Modifier.caosShimmer(isActive: Boolean = true): Modifier =

@@ -70,10 +70,10 @@ class CaosContainerViewTest {
         }
 
         composeTestRule.onNodeWithText("Hi").assertExists()
-        // O aviso de shard desconhecido só existe no build type debug — ver
-        // CaosUnknownShardViewTest para a asserção completa desse comportamento.
+        // The unknown-shard warning only exists in the debug build type — see
+        // CaosUnknownShardViewTest for the full assertion of this behavior.
         if (BuildConfig.DEBUG) {
-            composeTestRule.onNodeWithText("⚠ Shard 'Unknown' não registrado").assertExists()
+            composeTestRule.onNodeWithText("⚠ Shard 'Unknown' not registered").assertExists()
         }
     }
 

@@ -14,9 +14,9 @@ import io.github.andersontizaias.caos.core.CaosScreen
 import androidx.compose.foundation.lazy.grid.items as gridItems
 
 /**
- * Renderiza um [CaosScreen] usando containers Compose nativos. Escolhe
- * `LazyColumn`/`LazyRow`/`LazyVerticalGrid` conforme `container.type` — os três já são o próprio
- * container de scroll, sem precisar de um `ScrollView` explícito envolvendo.
+ * Renders a [CaosScreen] using native Compose containers. Picks
+ * `LazyColumn`/`LazyRow`/`LazyVerticalGrid` based on `container.type` — all three are already
+ * their own scroll container, no explicit wrapping `ScrollView` needed.
  */
 @Composable
 public fun CaosContainerView(

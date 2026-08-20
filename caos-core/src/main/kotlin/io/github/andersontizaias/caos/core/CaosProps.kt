@@ -1,9 +1,9 @@
 package io.github.andersontizaias.caos.core
 
 /**
- * Dicionário tipado de propriedades de um shard.
+ * Typed dictionary of a shard's properties.
  *
- * `double`/`bool` aceitam string numérica/booleana como fallback de conversão.
+ * `double`/`bool` accept a numeric/boolean string as a conversion fallback.
  */
 public data class CaosProps(
     val data: Map<String, Any?> = emptyMap(),
@@ -38,9 +38,9 @@ public data class CaosProps(
     }
 
     /**
-     * Valida se a chave contém uma string de cor hex válida (#RGB, #RRGGBB, #AARRGGBB).
-     * A conversão para `androidx.compose.ui.graphics.Color` é responsabilidade do módulo
-     * `caos-compose`.
+     * Validates that the key holds a valid hex color string (#RGB, #RRGGBB, #AARRGGBB).
+     * Converting it to `androidx.compose.ui.graphics.Color` is the `caos-compose` module's
+     * responsibility.
      */
     public fun hexColor(key: String): String? {
         val hex = data[key] as? String ?: return null

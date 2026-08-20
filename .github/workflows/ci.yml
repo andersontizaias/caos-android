@@ -24,10 +24,10 @@ jobs:
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
-      # `check` já encadeia ktlintCheck + detekt + spotlessCheck + testDebugUnitTest/
-      # testReleaseUnitTest/test + koverVerify (limiar 90%, ver kover.reports.verify em cada
-      # build.gradle.kts) pra todos os módulos — confirmado localmente com
-      # `./gradlew :<módulo>:check --dry-run`.
+      # `check` already chains ktlintCheck + detekt + spotlessCheck + testDebugUnitTest/
+      # testReleaseUnitTest/test + koverVerify (90% threshold, see kover.reports.verify in each
+      # build.gradle.kts) for every module — confirmed locally with
+      # `./gradlew :<module>:check --dry-run`.
       - name: Run check (build + test + lint + coverage)
         run: ./gradlew check --continue
 

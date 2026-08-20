@@ -14,7 +14,7 @@ class CaosStoreTest {
         store = CaosStore()
     }
 
-    // MARK: - Registro de dados / resolução síncrona
+    // MARK: - Data registration / synchronous resolution
 
     @Test
     fun `registers and resolves sync provider`() {
@@ -43,7 +43,7 @@ class CaosStoreTest {
         assertEquals(200.0, second)
     }
 
-    // MARK: - Registro de dados / StateFlow
+    // MARK: - Data registration / StateFlow
 
     @Test
     fun `resolve reads the current value of a registered flow`() {

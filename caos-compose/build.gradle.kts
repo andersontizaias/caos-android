@@ -36,9 +36,10 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    // Não configura `publishing { singleVariant("release") {...} }` aqui: o plugin
-    // com.vanniktech.maven.publish já faz isso por conta própria pra módulos Android — declarar
-    // de novo causa "singleVariant publishing DSL multiple times" na configuração.
+    // Not configuring `publishing { singleVariant("release") {...} }` here: the
+    // com.vanniktech.maven.publish plugin already does that on its own for Android modules —
+    // declaring it again causes "singleVariant publishing DSL multiple times" during
+    // configuration.
 }
 
 kotlin {
@@ -65,9 +66,9 @@ dependencies {
     testImplementation(platform("androidx.compose:compose-bom:2026.05.00"))
     testImplementation("androidx.compose.ui:ui-test-junit4")
     testImplementation("androidx.test:runner:1.6.2")
-    // testImplementation (não debugImplementation): precisa estar disponível pros testes de
-    // ambas as variantes (debug e release), mas nunca deve vazar pro AAR publicado — apenas
-    // dependências de teste garantem isso.
+    // testImplementation (not debugImplementation): needs to be available to both variants'
+    // tests (debug and release), but must never leak into the published AAR — only a test
+    // dependency guarantees that.
     testImplementation("androidx.compose.ui:ui-test-manifest")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
@@ -117,9 +118,9 @@ kover {
     }
 }
 
-// Publicação no Maven Central — credenciais vêm de secrets do GitHub Actions
-// (ver .github/workflows/release.yml), nunca commitadas. `publish` só roda de verdade em CI,
-// no push de uma tag `v*.*.*`.
+// Maven Central publishing — credentials come from GitHub Actions secrets
+// (see .github/workflows/release.yml), never committed. `publish` only actually runs in CI,
+// on a `v*.*.*` tag push.
 mavenPublishing {
     publishToMavenCentral()
     signAllPublications()

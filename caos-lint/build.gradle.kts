@@ -16,19 +16,19 @@ application {
     mainClass.set("io.github.andersontizaias.caos.lint.MainKt")
 }
 
-// Por padrão a task `run` do plugin `application` usa o diretório do próprio módulo
-// (caos-lint/) como workingDir — então `./gradlew :caos-lint:run --args="home.yaml"` procuraria
-// o arquivo em `caos-lint/home.yaml`, não na raiz do repo, onde o usuário roda o `./gradlew`.
-// Descoberto rodando de verdade em CI (ver .github/workflows/ci.yml), não era óbvio de antemão.
+// By default the `application` plugin's `run` task uses the module's own directory
+// (caos-lint/) as workingDir — so `./gradlew :caos-lint:run --args="home.yaml"` would look for
+// the file at `caos-lint/home.yaml`, not the repo root, where the user runs `./gradlew` from.
+// Discovered by actually running this in CI (see .github/workflows/ci.yml), not obvious upfront.
 tasks.named<JavaExec>("run") {
     workingDir = rootProject.projectDir
 }
 
-// Fat jar autocontido pra distribuição via GitHub Release (ver .github/workflows/release.yml).
-// `java -jar caos-lint-<versão>-all.jar <arquivo.yaml>` — sem precisar do classpath do Gradle.
-// Mantém o classifier "-all" (não vazio): um classifier vazio faria o nome do arquivo colidir
-// com o output da task `jar` padrão, usado por distZip/distTar/startScripts do plugin
-// `application` — Gradle recusa isso como dependência implícita não declarada entre tasks.
+// Self-contained fat jar for distribution via GitHub Release (see .github/workflows/release.yml).
+// `java -jar caos-lint-<version>-all.jar <file.yaml>` — no Gradle classpath needed.
+// Keeps the "-all" classifier (not empty): an empty classifier would make the jar's filename
+// collide with the standard `jar` task's output, used by distZip/distTar/startScripts from the
+// `application` plugin — Gradle refuses that as an undeclared implicit dependency between tasks.
 tasks.shadowJar {
     archiveBaseName.set("caos-lint")
 }

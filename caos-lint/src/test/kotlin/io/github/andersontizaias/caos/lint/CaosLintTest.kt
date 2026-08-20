@@ -132,7 +132,7 @@ class CaosLintTest {
     @Test
     fun `lint defaults to printing progress lines to stdout`() {
         val path = yamlFile("default_output.yaml", "version: 1\nscreens: []")
-        // Sem lambda customizada — exercita o default `::println`.
+        // No custom lambda — exercises the default `::println`.
         val result = lint(path)
         assertTrue(result.errors.isEmpty())
     }

@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 /**
- * Renderizado quando um tipo de shard não está registrado no [CaosStore]. Em debug mostra aviso
- * visível; em release renderiza nada.
+ * Rendered when a shard type isn't registered in [CaosStore]. Shows a visible warning in debug
+ * builds; renders nothing in release builds.
  */
 @Composable
 public fun CaosUnknownShardView(
@@ -20,7 +20,7 @@ public fun CaosUnknownShardView(
 ) {
     if (BuildConfig.DEBUG) {
         Text(
-            text = "⚠ Shard '$type' não registrado",
+            text = "⚠ Shard '$type' not registered",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier =

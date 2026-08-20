@@ -74,7 +74,7 @@ class CaosYamlParserTest {
 
         @Suppress("UNCHECKED_CAST")
         val result = CaosYamlParser.parseMapping(lines, cursor, 0) as Map<String, Any?>
-        // A chave é armazenada com as aspas ao redor, pois o parser não as remove da chave.
+        // The key is stored with its surrounding quotes, since the parser doesn't strip them.
         assertEquals("value", result["'key:colon'"])
     }
 

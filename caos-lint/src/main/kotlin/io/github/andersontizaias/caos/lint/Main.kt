@@ -3,17 +3,17 @@ package io.github.andersontizaias.caos.lint
 import kotlin.system.exitProcess
 
 /**
- * Entry point do CLI `caos-lint`.
+ * Entry point of the `caos-lint` CLI.
  *
- * Uso: `caos-lint <arquivo.yaml>`
+ * Usage: `caos-lint <file.yaml>`
  */
 public fun main(args: Array<String>) {
     exitProcess(runCaosLint(args))
 }
 
 /**
- * Executa o CLI e retorna o código de saída, sem terminar o processo da JVM — separado de
- * [main] pra ser testável (`exitProcess` só é chamado em [main]).
+ * Runs the CLI and returns the exit code, without terminating the JVM process — separated from
+ * [main] to be testable (`exitProcess` is only called in [main]).
  */
 internal fun runCaosLint(
     args: Array<String>,

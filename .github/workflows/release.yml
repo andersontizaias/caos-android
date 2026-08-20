@@ -33,11 +33,11 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
-      # Requer 4 secrets configurados no repo (Settings → Secrets and variables → Actions):
-      #   MAVEN_CENTRAL_USERNAME / MAVEN_CENTRAL_PASSWORD — token gerado no Central Portal
-      #     (https://central.sonatype.com), namespace io.github.andersontizaias verificado
-      #   GPG_SIGNING_KEY / GPG_SIGNING_PASSWORD — chave GPG em memória (armored, sem senha
-      #     protegendo o secret em si) usada por signAllPublications() nos build.gradle.kts
+      # Requires 4 secrets configured on the repo (Settings → Secrets and variables → Actions):
+      #   MAVEN_CENTRAL_USERNAME / MAVEN_CENTRAL_PASSWORD — token generated on the Central Portal
+      #     (https://central.sonatype.com), namespace io.github.andersontizaias verified
+      #   GPG_SIGNING_KEY / GPG_SIGNING_PASSWORD — in-memory GPG key (armored, no passphrase
+      #     protecting the secret itself) used by signAllPublications() in the build.gradle.kts files
       - name: Publish to Maven Central
         run: >
           ./gradlew
