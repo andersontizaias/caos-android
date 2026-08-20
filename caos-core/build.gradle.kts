@@ -4,6 +4,7 @@ plugins {
     id("com.diffplug.spotless")
     id("io.gitlab.arturbosch.detekt")
     id("org.jetbrains.kotlinx.kover")
+    id("com.vanniktech.maven.publish")
 }
 
 kotlin {
@@ -57,6 +58,40 @@ kover {
             rule {
                 minBound(90)
             }
+        }
+    }
+}
+
+// Publicação no Maven Central — credenciais vêm de secrets do GitHub Actions
+// (ver .github/workflows/release.yml), nunca commitadas. `publish` só roda de verdade em CI,
+// no push de uma tag `v*.*.*`.
+mavenPublishing {
+    publishToMavenCentral()
+    signAllPublications()
+    coordinates("io.github.andersontizaias", "caos-core", version.toString())
+    pom {
+        name.set("Caos Core")
+        description.set(
+            "Schema-only core of Caos (Configurable Automated On-demand Screens) — YAML v1 " +
+                "parser and typed models, zero third-party dependencies. Kotlin port of " +
+                "github.com/andersontizaias/Caos.",
+        )
+        url.set("https://github.com/andersontizaias/caos-android")
+        licenses {
+            license {
+                name.set("MIT")
+                url.set("https://opensource.org/licenses/MIT")
+            }
+        }
+        developers {
+            developer {
+                id.set("andersontizaias")
+                name.set("Anderson Tiago Izaias")
+            }
+        }
+        scm {
+            url.set("https://github.com/andersontizaias/caos-android")
+            connection.set("scm:git:https://github.com/andersontizaias/caos-android.git")
         }
     }
 }

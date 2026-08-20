@@ -1,6 +1,7 @@
 plugins {
     id("org.jetbrains.kotlin.jvm")
     application
+    id("com.gradleup.shadow")
     id("org.jlleitschuh.gradle.ktlint")
     id("com.diffplug.spotless")
     id("io.gitlab.arturbosch.detekt")
@@ -13,6 +14,15 @@ kotlin {
 
 application {
     mainClass.set("io.github.andersontizaias.caos.lint.MainKt")
+}
+
+// Fat jar autocontido pra distribuição via GitHub Release (ver .github/workflows/release.yml).
+// `java -jar caos-lint-<versão>-all.jar <arquivo.yaml>` — sem precisar do classpath do Gradle.
+// Mantém o classifier "-all" (não vazio): um classifier vazio faria o nome do arquivo colidir
+// com o output da task `jar` padrão, usado por distZip/distTar/startScripts do plugin
+// `application` — Gradle recusa isso como dependência implícita não declarada entre tasks.
+tasks.shadowJar {
+    archiveBaseName.set("caos-lint")
 }
 
 dependencies {

@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Build, Test & Coverage (>= 90%)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+      # `check` já encadeia ktlintCheck + detekt + spotlessCheck + testDebugUnitTest/
+      # testReleaseUnitTest/test + koverVerify (limiar 90%, ver kover.reports.verify em cada
+      # build.gradle.kts) pra todos os módulos — confirmado localmente com
+      # `./gradlew :<módulo>:check --dry-run`.
+      - name: Run check (build + test + lint + coverage)
+        run: ./gradlew check --continue
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: '**/build/reports/tests/'
+          retention-days: 7
+
+      - name: Upload coverage reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports
+          path: '**/build/reports/kover/'
+          retention-days: 7
+
+  build-sample:
+    name: Build caos-sample APK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+      - name: Assemble caos-sample debug APK
+        run: ./gradlew :caos-sample:assembleDebug
+
+  caos-lint-dogfood:
+    name: Validate caos-sample's YAML with caos-lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+      - name: Run caos-lint against caos-sample/src/main/assets/home.yaml
+        run: ./gradlew :caos-lint:run --args="caos-sample/src/main/assets/home.yaml"
