@@ -1,0 +1,22 @@
+version: 1
+screens:
+  - id: home
+    container:
+      type: vertical
+      spacing: 16
+      padding:
+        top: 24
+        bottom: 24
+        leading: 16
+        trailing: 16
+    shards:
+      - type: BalanceCard
+        id: card_balance
+        props:
+          # "id" repetido aqui de propósito: nem CaosContainerView (Compose) nem
+          # CaosContainerView (SwiftUI) injetam o id do shard dentro de `props`, então o shard
+          # só consegue disparar onTap com o id certo se ele mesmo estiver acessível via props.
+          id: "card_balance"
+          title: "Saldo disponível"
+          dataKey: "user.balance"
+          cornerRadius: 12
