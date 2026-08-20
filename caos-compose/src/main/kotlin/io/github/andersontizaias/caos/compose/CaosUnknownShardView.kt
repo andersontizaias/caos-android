@@ -11,8 +11,7 @@ import androidx.compose.ui.unit.dp
 
 /**
  * Renderizado quando um tipo de shard não está registrado no [CaosStore]. Em debug mostra aviso
- * visível; em release renderiza nada — espelha `CaosUnknownShardView` do Caos iOS
- * (`#if DEBUG` / `EmptyView()`).
+ * visível; em release renderiza nada.
  */
 @Composable
 public fun CaosUnknownShardView(

@@ -1,6 +1,8 @@
 # Caos Android — Plano de Implementação (Jetpack Compose)
 
-> **Status:** Planejado
+> **Status:** Fases 0–6 concluídas — paridade de API com o Swift v1.0.0 alcançada
+> (`caos-core`, `caos-compose`, `caos-lint`, `caos-sample`, CI/CD, docs). Publicação real no Maven
+> Central pendente de secrets que só o usuário pode configurar — ver Fase 5.
 > **Fonte da verdade:** [`andersontizaias/Caos`](https://github.com/andersontizaias/Caos) v1.0.0 (SwiftUI, `Sources/Caos/`)
 > **Este documento substitui** o rascunho anterior em `chaos/PLAN_ANDROID.md`, que presumia uma
 > arquitetura (`NSClassFromString`, dependência `kaml`) que não corresponde à implementação real do
@@ -178,30 +180,18 @@ num emulador (card renderizado + tap disparando `onTap`), não só compilado —
       usuário. `version.txt` (fonte única de verdade, lido em `build.gradle.kts` raiz) já está no
       lugar como pré-requisito, caso queira adicionar depois.
 
-### Fase 6 — Docs e certificação de paridade
-`README.md` espelhando as seções do Swift (Quick Start, YAML Schema Reference, CaosProps API,
-Registering Shards, Data Binding, Tap Events, Loading States, YAML Validation), tabela de paridade
-iOS↔Android, `CHANGELOG.md` com entrada `v1.0.0` alinhada à tag do repo Swift.
+### Fase 6 — Docs e certificação de paridade ✅
+`README.md` espelhando as seções do Swift (Architecture, Requirements, Local Development, Quick
+Start, YAML Schema Reference, CaosProps API, Registering Shards, Data Binding, Tap Events, Loading
+States, YAML Validation, Installation), tabela de paridade iOS↔Android, `CHANGELOG.md` com entrada
+`v1.0.0` — [PR #6](https://github.com/andersontizaias/caos-android/pull/6).
 
 ---
 
-## Tabela de Paridade iOS vs Android (alvo)
+## Tabela de Paridade iOS vs Android
 
-| Feature | iOS | Android |
-|---|---|---|
-| Parser YAML v1 (zero deps) | `CaosParser.swift` (`YAMLParser`) | `CaosParser.kt` (`CaosYamlParser`) |
-| Propriedades tipadas | `CaosProps` (struct) | `CaosProps` (data class) |
-| Registro de shards | closure explícita (`register(type:factory:)`) | closure explícita (`register(type:content:)`) |
-| Container vertical/horizontal/grid | `LazyVStack`/`LazyHStack`/`LazyVGrid` | `Column`/`Row`/`LazyVerticalGrid` |
-| Data binding reativo | `CaosStore` + Combine (`CurrentValueSubject`) | `CaosStore` + Coroutines (`MutableStateFlow`) |
-| Injeção de contexto | `@Environment(\.caosStore)` | `CompositionLocal<CaosStore>` |
-| Tap events | `@Environment(\.caosTapAction)` / `.onCaosTap` | `CompositionLocal` / `LocalCaosTapAction` |
-| Shard desconhecido | `CaosUnknownShardView` (`#if DEBUG`) | `CaosUnknownShardView` (`BuildConfig.DEBUG`) |
-| Loading shimmer | `ShimmerModifier` / `.shimmer()` | `Modifier.caosShimmer()` |
-| CLI de validação | `caos-lint` (SPM executable) | `caos-lint` (Gradle `application`) |
-| UI framework | SwiftUI (MV, sem ViewModel) | Jetpack Compose (mesmo padrão MV) |
-| Distribuição | Swift Package Manager | Maven Central |
-| Schema YAML | v1 compartilhado | v1 compartilhado, byte-a-byte |
+Movida pra [`PARITY.md`](./PARITY.md) — fonte única, também linkada do `README.md`, pra evitar as
+duas tabelas divergirem conforme o projeto evolui além do v1.0.0.
 
 ---
 

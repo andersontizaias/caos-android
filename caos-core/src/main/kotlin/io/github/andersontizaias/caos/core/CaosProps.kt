@@ -3,8 +3,7 @@ package io.github.andersontizaias.caos.core
 /**
  * Dicionário tipado de propriedades de um shard.
  *
- * Espelha `CaosProps` do Caos iOS (Sources/Caos/Schema/CaosProps.swift) — mesma API, mesma
- * semântica de conversão (`double`/`bool` aceitam string numérica/booleana como fallback).
+ * `double`/`bool` aceitam string numérica/booleana como fallback de conversão.
  */
 public data class CaosProps(
     val data: Map<String, Any?> = emptyMap(),
@@ -41,7 +40,7 @@ public data class CaosProps(
     /**
      * Valida se a chave contém uma string de cor hex válida (#RGB, #RRGGBB, #AARRGGBB).
      * A conversão para `androidx.compose.ui.graphics.Color` é responsabilidade do módulo
-     * `caos-compose` (Fase 2) — mesma separação de responsabilidade do Swift.
+     * `caos-compose`.
      */
     public fun hexColor(key: String): String? {
         val hex = data[key] as? String ?: return null

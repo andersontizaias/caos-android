@@ -17,7 +17,7 @@ import io.github.andersontizaias.caos.compose.LocalCaosTapAction
 import io.github.andersontizaias.caos.core.CaosProps
 
 /**
- * Shard de exemplo — espelha `BalanceCardView` do Quick Start do README Swift. Registrado no
+ * Shard de exemplo, do Quick Start do README. Registrado no
  * [io.github.andersontizaias.caos.compose.CaosStore] via `register(type = "BalanceCard") { ... }`
  * (ver [MainActivity]).
  */

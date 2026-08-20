@@ -7,11 +7,8 @@ import java.io.File
 import java.io.IOException
 
 /**
- * Valida um arquivo de schema YAML v1 do Caos e reporta problemas.
- *
- * Espelha a função `lint` do `caos-lint` Swift (Sources/CaosLint/main.swift) — mesmas regras
- * (shard sem `type`, `id` duplicado, warning de shard sem `id`) e mesmas mensagens, pra manter a
- * documentação de instalação idêntica nos dois READMEs.
+ * Valida um arquivo de schema YAML v1 do Caos e reporta problemas — shard sem `type`, `id`
+ * duplicado, warning de shard sem `id`.
  *
  * [output] recebe cada linha de progresso (`✓ ...`) — por padrão imprime no stdout; testes podem
  * substituir por uma lambda que apenas coleta as linhas, sem precisar capturar `System.out`.

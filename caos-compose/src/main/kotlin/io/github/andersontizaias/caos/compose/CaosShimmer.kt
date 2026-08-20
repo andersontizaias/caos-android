@@ -15,9 +15,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 /**
- * Aplica um efeito shimmer de carregamento — espelha `ShimmerModifier`/`.shimmer(isActive:)` do
- * Caos iOS (Sources/Caos/SwiftUI/CaosShimmerModifier.swift). Usa apenas o sistema de animação do
- * Compose — sem `Canvas` customizado além do `drawWithContent` necessário pro overlay.
+ * Aplica um efeito shimmer de carregamento. Usa apenas o sistema de animação do Compose — sem
+ * `Canvas` customizado além do `drawWithContent` necessário pro overlay.
  *
  * Uso:
  * ```kotlin

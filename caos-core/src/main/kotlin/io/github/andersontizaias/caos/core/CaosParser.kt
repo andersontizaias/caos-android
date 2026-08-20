@@ -3,9 +3,6 @@ package io.github.andersontizaias.caos.core
 /**
  * Parseia arquivos de schema YAML v1 do Caos.
  * Usa apenas a stdlib do Kotlin — sem dependências de terceiros.
- *
- * Espelha `CaosParser` do Caos iOS (Sources/Caos/Schema/CaosParser.swift). A API v0 legada
- * (`CaosParser(content:)` / `getScreens()`) não foi portada — o Android nasce direto em v1.
  */
 public object CaosParser {
     private const val SUPPORTED_VERSION = 1

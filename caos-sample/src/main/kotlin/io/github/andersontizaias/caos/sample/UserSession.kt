@@ -3,7 +3,7 @@ package io.github.andersontizaias.caos.sample
 import java.text.NumberFormat
 import java.util.Locale
 
-/** Fonte de dados de exemplo — espelha `UserSession.current` do Quick Start do README Swift. */
+/** Fonte de dados de exemplo, do Quick Start do README. */
 internal object UserSession {
     val formattedBalance: String
         get() = currencyFormat.format(BALANCE)

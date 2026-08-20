@@ -1,27 +1,23 @@
 package io.github.andersontizaias.caos.core
 
 /**
- * Cursor mutável de linha, usado no lugar do `inout Int` do Swift (`index: inout Int`).
- * Compartilhado entre chamadas recursivas de [CaosYamlParser] — cada função avança [index]
- * conforme consome linhas.
+ * Cursor mutável de linha, compartilhado entre chamadas recursivas de [CaosYamlParser] — cada
+ * função avança [index] conforme consome linhas.
  */
 internal class YamlCursor(
     var index: Int = 0,
 )
 
 /**
- * Parser YAML interno, recursivo, hand-rolled — sem dependências de terceiros.
- *
- * Port linha-a-linha do `YAMLParser` do Caos iOS (Sources/Caos/Schema/CaosParser.swift). Suporta
- * o subconjunto de YAML usado pelo schema Caos v1: mappings, sequences, escalares (string/int/
+ * Parser YAML interno, recursivo, hand-rolled — sem dependências de terceiros. Suporta o
+ * subconjunto de YAML usado pelo schema Caos v1: mappings, sequences, escalares (string/int/
  * double/bool/null), comentários `#` e strings entre aspas simples/duplas.
  *
- * Diferença deliberada em relação ao Swift: `null`/`~` é representado pelo `null` literal do
- * Kotlin (não por um sentinela tipo `NSNull`), porque `Map<String, Any?>` já distingue "chave
- * ausente" de "chave presente com valor nulo" nativamente.
+ * `null`/`~` é representado pelo `null` literal do Kotlin, porque `Map<String, Any?>` já
+ * distingue "chave ausente" de "chave presente com valor nulo" nativamente.
  */
 internal object CaosYamlParser {
-    /** Ponto de entrada usado apenas em testes diretos do parser (mirror de `YAMLParser.parse`). */
+    /** Ponto de entrada usado apenas em testes diretos do parser. */
     fun parse(content: String): Any {
         val lines = splitLines(content)
         val cursor = YamlCursor(0)
@@ -57,10 +53,9 @@ internal object CaosYamlParser {
     /**
      * Parseia um mapping YAML em exatamente `indent` espaços. Retorna `Map<String, Any?>`.
      *
-     * Port fiel do `parseMapping` do Swift — o scanner linha-a-linha precisa de múltiplos
-     * `continue`/`break` para tratar dedent, indent malformado, transição pra sequence e
-     * comentários no mesmo laço; separar isso em funções menores obscureceria a paridade com o
-     * original em vez de simplificar.
+     * O scanner linha-a-linha precisa de múltiplos `continue`/`break` para tratar dedent, indent
+     * malformado, transição pra sequence e comentários no mesmo laço; separar isso em funções
+     * menores obscureceria a lógica em vez de simplificar.
      */
     @Suppress("ReturnCount", "CyclomaticComplexMethod", "NestedBlockDepth", "LoopWithTooManyJumpStatements")
     fun parseMapping(
@@ -111,7 +106,7 @@ internal object CaosYamlParser {
                     val value = parseBlock(lines, cursor, childIndent)
                     if (value != null) result[key] = value
                 }
-                // Sem conteúdo filho: valor vazio/nulo — chave é ignorada, igual ao Swift.
+                // Sem conteúdo filho: valor vazio/nulo — chave é ignorada.
             } else {
                 result[key] = parseScalar(stripInlineComment(rest))
             }

@@ -16,8 +16,8 @@ plugins {
     id("com.gradleup.shadow") version "8.3.11" apply false
 }
 
-// Fonte única de verdade pra versão do projeto — mesmo padrão do repo Swift (`version.txt` +
-// release-please). Todos os módulos compartilham essa versão.
+// Fonte única de verdade pra versão do projeto (version.txt, gerenciável por release-please no
+// futuro). Todos os módulos compartilham essa versão.
 val projectVersion = file("version.txt").readText().trim()
 
 allprojects {
