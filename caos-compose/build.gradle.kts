@@ -1,3 +1,6 @@
+import org.gradle.api.publish.PublishingExtension
+import org.gradle.api.publish.maven.MavenPublication
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -118,10 +121,30 @@ kover {
     }
 }
 
+// AGP's own javadoc jar generation for Kotlin Android libraries (the `javaDocReleaseGeneration`
+// task, wired in automatically by vanniktech's AndroidSingleVariantLibrary default) delegates to
+// a bundled Dokka engine that can't read the `PermittedSubclasses` attribute Kotlin emits for
+// sealed classes (like CaosError) when targeting JVM 17+. Confirmed by reproducing locally:
+// `com.android.build.gradle.tasks.JavaDocGenerationTask$DokkaWorkAction` throws
+// `UnsupportedOperationException: PermittedSubclasses requires ASM9`. Maven Central still
+// requires a javadoc artifact to be present on the publication, so we disable AGP's generator
+// and attach a minimal empty jar instead — an accepted, common workaround until AGP/Dokka catch
+// up with newer Kotlin bytecode.
+val emptyJavadocJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("javadoc")
+}
+
 // Maven Central publishing — credentials come from GitHub Actions secrets
 // (see .github/workflows/release.yml), never committed. `publish` only actually runs in CI,
 // on a `v*.*.*` tag push.
 mavenPublishing {
+    configure(
+        com.vanniktech.maven.publish.AndroidSingleVariantLibrary(
+            variant = "release",
+            sourcesJar = true,
+            publishJavadocJar = false,
+        ),
+    )
     publishToMavenCentral()
     signAllPublications()
     coordinates("io.github.andersontizaias", "caos-compose", version.toString())
@@ -149,5 +172,15 @@ mavenPublishing {
             url.set("https://github.com/andersontizaias/caos-android")
             connection.set("scm:git:https://github.com/andersontizaias/caos-android.git")
         }
+    }
+}
+
+// `publishJavadocJar = false` above means no javadoc artifact is attached automatically — attach
+// our empty jar to whatever MavenPublication(s) the plugin creates. `withType(...).configureEach`
+// runs for publications created later too (this one is created lazily inside an
+// `afterEvaluate` block by AndroidSingleVariantLibrary), so ordering here doesn't matter.
+extensions.configure<PublishingExtension> {
+    publications.withType<MavenPublication>().configureEach {
+        artifact(emptyJavadocJar)
     }
 }
