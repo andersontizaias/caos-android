@@ -41,6 +41,15 @@ with no v0 legacy to port.
   GitHub Release with `caos-lint`'s fat jar and `caos-sample`'s APK)
 - **`version.txt`** — single source of truth for the version, same pattern as the Swift repo
 
+### Fixed
+
+- Disabled AGP's Dokka-based javadoc jar generation for `caos-compose`, replaced with a minimal
+  empty jar. AGP's `javaDocReleaseGeneration` task fails on `CaosError` (a `sealed class`) with
+  `UnsupportedOperationException: PermittedSubclasses requires ASM9` — the bundled Dokka/ASM
+  version can't read the JVM 17+ sealed-class bytecode attribute Kotlin emits when targeting
+  JVM 21. Maven Central only checks for the javadoc artifact's presence, not its content
+  ([PR #10](https://github.com/andersontizaias/caos-android/pull/10)).
+
 ### Deliberate simplifications relative to Swift
 
 Documented with the full reasoning in [`PLAN_ANDROID.md`](./PLAN_ANDROID.md):
@@ -53,7 +62,7 @@ Documented with the full reasoning in [`PLAN_ANDROID.md`](./PLAN_ANDROID.md):
 
 ### Known gaps
 
-- Actual publishing to Maven Central is pending secrets (Central Portal account, verified
-  namespace, GPG key) — the workflow is ready, only the configuration that's up to the user is
-  missing
 - `release-please` wasn't added (would require installing a GitHub App on the repo)
+
+**Published:** [`io.github.andersontizaias:caos-core:1.0.0`](https://central.sonatype.com/artifact/io.github.andersontizaias/caos-core) ·
+[`io.github.andersontizaias:caos-compose:1.0.0`](https://central.sonatype.com/artifact/io.github.andersontizaias/caos-compose)
