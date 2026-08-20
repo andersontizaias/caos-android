@@ -1,0 +1,67 @@
+name: Lint
+
+on: [push]
+
+concurrency:
+  group: lint-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ktlint:
+    name: KtLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+      - name: Run ktlint
+        run: ./gradlew ktlintCheck --continue
+      - name: Upload ktlint reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ktlint-reports
+          path: '**/build/reports/ktlint/'
+          retention-days: 7
+
+  spotless:
+    name: Spotless
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+      - name: Check formatting
+        run: ./gradlew spotlessCheck
+
+  detekt:
+    name: Detekt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+      - name: Run Detekt
+        run: ./gradlew detekt --continue
+      - name: Upload Detekt reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: detekt-reports
+          path: '**/build/reports/detekt/'
+          retention-days: 7

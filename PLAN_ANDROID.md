@@ -119,49 +119,64 @@ caos-android/
 `settings.gradle.kts` com os 4 módulos, ktlint + detekt + spotless configurados nos mesmos moldes
 do `little_bank_android/app/build.gradle.kts`, CI esqueleto, README stub, `LICENSE` MIT.
 
-### Fase 1 — `caos-core`
+### Fase 1 — `caos-core` ✅
 Port do parser YAML hand-rolled + modelos de schema. **Critério de aceite central:** copiar os 3
 fixtures do repo Swift (`valid_v1.yaml`, `invalid_no_version.yaml`, `edge_cases.yaml`) para
 `caos-core/src/test/.../Fixtures/` e escrever testes que comparam a árvore parseada Kotlin com a
 árvore parseada Swift (mesmos valores, mesmos tipos) — não só "não crasha".
 
-- [ ] `CaosParser.parse()` lê o mesmo YAML v1 do iOS sem modificação no arquivo
-- [ ] `CaosParseException` carrega `CaosError` com linha/motivo, igual ao Swift
-- [ ] `CaosProps.nested()` funciona pra `padding` hierárquico
-- [ ] Módulo compila sem `android.jar` (JVM puro)
-- [ ] Cobertura ≥ 90%
+- [x] `CaosParser.parse()` lê o mesmo YAML v1 do iOS sem modificação no arquivo
+- [x] `CaosParseException` carrega `CaosError` com linha/motivo, igual ao Swift
+- [x] `CaosProps.nested()` funciona pra `padding` hierárquico
+- [x] Módulo compila sem `android.jar` (JVM puro)
+- [x] Cobertura ≥ 90% (98.5%, 60 testes — [PR #1](https://github.com/andersontizaias/caos-android/pull/1))
 
-### Fase 2 — `caos-compose`
+### Fase 2 — `caos-compose` ✅
 `CaosStore`, `LocalCaosStore`/`LocalCaosTapAction`, `CaosScreenView`, `CaosContainerView`,
 `CaosUnknownShardView`, `Modifier.caosShimmer`.
 
-- [ ] `CaosScreenView` renderiza shards registrados corretamente, nos 3 tipos de container
-- [ ] Shard com `dataKey` atualiza UI automaticamente quando o `StateFlow` emite
-- [ ] Shard não registrado exibe `CaosUnknownShardView` sem crash, oculto em release
-- [ ] Testes rodam via **Robolectric + Roborazzi** (mesmo setup do `little_bank_android`), sem
-      exigir emulador — corta custo e tempo de CI vs. o plano antigo, que propunha matriz de
-      emulador pra tudo
-- [ ] Cobertura ≥ 90%
+- [x] `CaosScreenView` renderiza shards registrados corretamente, nos 3 tipos de container
+- [x] Shard com `dataKey` atualiza UI automaticamente quando o `StateFlow` emite
+- [x] Shard não registrado exibe `CaosUnknownShardView` sem crash, oculto em release
+- [x] Testes rodam via **Robolectric** (Roborazzi disponível no classpath pra screenshot tests
+      futuros; os testes atuais usam asserções `compose-ui-test`, sem emulador —
+      [PR #2](https://github.com/andersontizaias/caos-android/pull/2))
+- [x] Cobertura ≥ 90% (93.5%, 26 testes debug / 26 release com 1 skip esperado por `BuildConfig.DEBUG`)
 
-### Fase 3 — `caos-lint`
+### Fase 3 — `caos-lint` ✅
 CLI JVM reusando `caos-core`. Saída textual comparável linha a linha com o `caos-lint` Swift, pra
 manter a doc de instalação (`swift run caos-lint` / `./gradlew :caos-lint:run --args=...`)
-consistente nos dois READMEs.
+consistente nos dois READMEs. 94% de cobertura, 12 testes —
+[PR #3](https://github.com/andersontizaias/caos-android/pull/3).
 
-### Fase 4 — `caos-sample`
+### Fase 4 — `caos-sample` ✅
 Reproduz o Quick Start do README Swift: `home.yaml` com `BalanceCard`, `MainActivity` registrando o
-shard e uma key reativa, exatamente como o exemplo `MyApp` do Swift. Serve de prova de paridade
-ponta a ponta e de fixture para o screenshot test do Roborazzi.
+shard e uma key reativa, exatamente como o exemplo `MyApp` do Swift. Validado rodando de verdade
+num emulador (card renderizado + tap disparando `onTap`), não só compilado —
+[PR #4](https://github.com/andersontizaias/caos-android/pull/4).
 
-### Fase 5 — CI/CD e Distribuição
-- `lint.yml`: ktlint + detekt em todo push (equivalente a `swiftlint --strict` + `swiftformat --lint`)
-- `ci.yml`: testes unitários + Robolectric, cobertura via Kover com limiar 90% (equivalente a
-  `swift test --enable-code-coverage`)
-- `release.yml`: publica `caos-core` e `caos-compose` no Maven Central via
-  `com.vanniktech.maven.publish`, coordenadas `io.github.andersontizaias:caos-core` /
-  `io.github.andersontizaias:caos-compose`
-- Avaliar `release-please` pro changelog automático — o repo Swift já usa esse padrão
-  (`version.txt` + release-please), manter consistência entre os dois repos
+### Fase 5 — CI/CD e Distribuição ✅ (publish real pendente de credenciais)
+- [x] `lint.yml`: ktlint + Spotless + detekt em todo push
+- [x] `ci.yml`: `./gradlew check` (testes + Robolectric + ktlint + detekt + Spotless + Kover
+      ≥90%, já encadeados por task dependency em cada módulo — confirmado com
+      `./gradlew :<módulo>:check --dry-run`), mais build do `caos-sample` e um smoke test que
+      roda `caos-lint` contra o `home.yaml` do `caos-sample` (dogfooding entre módulos)
+- [x] `release.yml`: publica `caos-core` e `caos-compose` no Maven Central via
+      `com.vanniktech.maven.publish` (`publishAndReleaseToMavenCentral`), coordenadas
+      `io.github.andersontizaias:caos-core` / `io.github.andersontizaias:caos-compose`; também
+      gera o fat jar do `caos-lint` (plugin `com.gradleup.shadow`, versão 8.3.x — a linha 9.x
+      exige uma API do Gradle mais nova que a 8.14.1 usada aqui) e o APK debug do `caos-sample`,
+      anexados a uma GitHub Release
+  - **Pendente do lado do usuário, não implementável por mim:** o workflow só publica de
+    verdade quando o repo tiver os secrets `MAVEN_CENTRAL_USERNAME`, `MAVEN_CENTRAL_PASSWORD`,
+    `GPG_SIGNING_KEY`, `GPG_SIGNING_PASSWORD` configurados — o que exige criar uma conta no
+    [Central Portal](https://central.sonatype.com), verificar o namespace
+    `io.github.andersontizaias` e gerar uma chave GPG. Nada disso foi criado ou simulado; o
+    workflow está pronto pra usar assim que esses secrets existirem.
+- [ ] `release-please` pro changelog automático — **decisão consciente de não implementar agora**:
+      requer instalar o GitHub App `release-please` no repo, uma ação de conta que cabe ao
+      usuário. `version.txt` (fonte única de verdade, lido em `build.gradle.kts` raiz) já está no
+      lugar como pré-requisito, caso queira adicionar depois.
 
 ### Fase 6 — Docs e certificação de paridade
 `README.md` espelhando as seções do Swift (Quick Start, YAML Schema Reference, CaosProps API,

@@ -7,6 +7,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
     id("io.github.takahirom.roborazzi")
     id("org.jetbrains.kotlinx.kover")
+    id("com.vanniktech.maven.publish")
 }
 
 android {
@@ -35,6 +36,9 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    // Não configura `publishing { singleVariant("release") {...} }` aqui: o plugin
+    // com.vanniktech.maven.publish já faz isso por conta própria pra módulos Android — declarar
+    // de novo causa "singleVariant publishing DSL multiple times" na configuração.
 }
 
 kotlin {
@@ -109,6 +113,40 @@ kover {
             rule {
                 minBound(90)
             }
+        }
+    }
+}
+
+// Publicação no Maven Central — credenciais vêm de secrets do GitHub Actions
+// (ver .github/workflows/release.yml), nunca commitadas. `publish` só roda de verdade em CI,
+// no push de uma tag `v*.*.*`.
+mavenPublishing {
+    publishToMavenCentral()
+    signAllPublications()
+    coordinates("io.github.andersontizaias", "caos-compose", version.toString())
+    pom {
+        name.set("Caos Compose")
+        description.set(
+            "Jetpack Compose rendering engine for Caos (Configurable Automated On-demand " +
+                "Screens) — CaosStore, CaosScreenView, CaosContainerView. Kotlin port of " +
+                "github.com/andersontizaias/Caos.",
+        )
+        url.set("https://github.com/andersontizaias/caos-android")
+        licenses {
+            license {
+                name.set("MIT")
+                url.set("https://opensource.org/licenses/MIT")
+            }
+        }
+        developers {
+            developer {
+                id.set("andersontizaias")
+                name.set("Anderson Tiago Izaias")
+            }
+        }
+        scm {
+            url.set("https://github.com/andersontizaias/caos-android")
+            connection.set("scm:git:https://github.com/andersontizaias/caos-android.git")
         }
     }
 }

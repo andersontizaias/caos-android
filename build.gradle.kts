@@ -10,4 +10,16 @@ plugins {
     id("org.jetbrains.kotlin.android") version "2.3.21" apply false
     id("org.jetbrains.kotlin.plugin.compose") version "2.3.21" apply false
     id("io.github.takahirom.roborazzi") version "1.60.0" apply false
+    id("com.vanniktech.maven.publish") version "0.33.0" apply false
+    // 8.3.x, não 9.x: a linha 9.x do Shadow exige uma API do Gradle mais nova que a 8.14.1
+    // usada aqui (NoSuchMethodError em AdhocComponentWithVariants.addVariantsFromConfiguration).
+    id("com.gradleup.shadow") version "8.3.11" apply false
+}
+
+// Fonte única de verdade pra versão do projeto — mesmo padrão do repo Swift (`version.txt` +
+// release-please). Todos os módulos compartilham essa versão.
+val projectVersion = file("version.txt").readText().trim()
+
+allprojects {
+    version = projectVersion
 }
