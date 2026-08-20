@@ -17,7 +17,5 @@ rootProject.name = "caos-android"
 
 include(":caos-core")
 include(":caos-compose")
-
-// Habilitados nas próximas fases (ver PLAN_ANDROID.md):
-// include(":caos-lint")     // Fase 3
-// include(":caos-sample")   // Fase 4
+include(":caos-lint")
+include(":caos-sample")
