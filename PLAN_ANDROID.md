@@ -1,8 +1,8 @@
 # Caos Android — Implementation Plan (Jetpack Compose)
 
 > **Status:** Phases 0–6 complete — API parity with Swift v1.0.0 achieved
-> (`caos-core`, `caos-compose`, `caos-lint`, `caos-sample`, CI/CD, docs). Actual publishing to
-> Maven Central is pending secrets only the user can configure — see Phase 5.
+> (`caos-core`, `caos-compose`, `caos-lint`, `caos-sample`, CI/CD, docs). `v1.0.0` published to
+> Maven Central — see Phase 5.
 > **Source of truth:** [`andersontizaias/Caos`](https://github.com/andersontizaias/Caos) v1.0.0 (SwiftUI, `Sources/Caos/`)
 > **This document replaces** the earlier draft at `chaos/PLAN_ANDROID.md`, which assumed an
 > architecture (`NSClassFromString`, `kaml` dependency) that doesn't match the real Caos iOS
@@ -160,7 +160,7 @@ registering the shard and a reactive key, exactly like the Swift `MyApp` example
 actually running it on an emulator (card rendered + tap dispatching `onTap`), not just compiled
 — [PR #4](https://github.com/andersontizaias/caos-android/pull/4).
 
-### Phase 5 — CI/CD and Distribution ✅ (real publishing pending credentials)
+### Phase 5 — CI/CD and Distribution ✅
 - [x] `lint.yml`: ktlint + Spotless + detekt on every push
 - [x] `ci.yml`: `./gradlew check` (tests + Robolectric + ktlint + detekt + Spotless + Kover
       ≥90%, already chained via task dependencies in each module — confirmed with
@@ -172,12 +172,19 @@ actually running it on an emulator (card rendered + tap dispatching `onTap`), no
       builds `caos-lint`'s fat jar (`com.gradleup.shadow` plugin, version 8.3.x — the 9.x line
       requires a newer Gradle API than the 8.14.1 used here) and `caos-sample`'s debug APK,
       both attached to a GitHub Release
-  - **Pending on the user's side, not something I can implement:** the workflow only actually
-    publishes once the repo has the `MAVEN_CENTRAL_USERNAME`, `MAVEN_CENTRAL_PASSWORD`,
-    `GPG_SIGNING_KEY`, `GPG_SIGNING_PASSWORD` secrets configured — which requires creating a
-    [Central Portal](https://central.sonatype.com) account, verifying the
-    `io.github.andersontizaias` namespace, and generating a GPG key. None of this was created or
-    simulated; the workflow is ready to use as soon as those secrets exist.
+  - **`v1.0.0` published for real** on 2026-08-20, after creating a Central Portal account,
+    verifying the `io.github.andersontizaias` namespace, and generating a GPG key (all done by
+    the user — account-level actions I can't perform). The `MAVEN_CENTRAL_USERNAME`,
+    `MAVEN_CENTRAL_PASSWORD`, `GPG_SIGNING_KEY`, `GPG_SIGNING_PASSWORD` secrets are configured
+    on the repo.
+  - The first release attempt failed at the Maven Central publish step: AGP's
+    `javaDocReleaseGeneration` task delegates to a Dokka engine bundled inside AGP that can't
+    read the `PermittedSubclasses` attribute Kotlin emits for `sealed class CaosError` when
+    targeting JVM 21 (`UnsupportedOperationException: PermittedSubclasses requires ASM9`).
+    Reproduced locally, fixed by disabling AGP's javadoc generator
+    (`AndroidSingleVariantLibrary(publishJavadocJar = false)`) and attaching a minimal empty jar
+    instead — Maven Central only checks for the artifact's presence, not its content
+    ([PR #10](https://github.com/andersontizaias/caos-android/pull/10)).
 - [ ] `release-please` for automated changelogs — **a conscious decision not to implement this
       now**: it requires installing the `release-please` GitHub App on the repo, an
       account-level action that's up to the user. `version.txt` (single source of truth, read

@@ -366,11 +366,6 @@ java -jar caos-lint-1.0.0-all.jar home.yaml
 
 ### Gradle (Maven Central)
 
-> **Status:** the publishing workflow (`release.yml`) is ready, but actual publishing depends on
-> secrets that don't exist in the repo yet (Central Portal account, verified namespace, GPG key —
-> details in Phase 5 of [`PLAN_ANDROID.md`](./PLAN_ANDROID.md)). The coordinates below are the
-> ones that will be used once the first release ships.
-
 ```kotlin
 // settings.gradle.kts
 dependencyResolutionManagement {
@@ -387,9 +382,6 @@ dependencies {
     implementation("io.github.andersontizaias:caos-compose:1.0.0")
 }
 ```
-
-Until then, consume it as a local Gradle project (composite build or `includeBuild`) pointing at
-this repository.
 
 ---
 
