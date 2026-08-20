@@ -188,23 +188,10 @@ States, YAML Validation, Installation), tabela de paridade iOS↔Android, `CHANG
 
 ---
 
-## Tabela de Paridade iOS vs Android (alvo)
+## Tabela de Paridade iOS vs Android
 
-| Feature | iOS | Android |
-|---|---|---|
-| Parser YAML v1 (zero deps) | `CaosParser.swift` (`YAMLParser`) | `CaosParser.kt` (`CaosYamlParser`) |
-| Propriedades tipadas | `CaosProps` (struct) | `CaosProps` (data class) |
-| Registro de shards | closure explícita (`register(type:factory:)`) | closure explícita (`register(type:content:)`) |
-| Container vertical/horizontal/grid | `LazyVStack`/`LazyHStack`/`LazyVGrid` | `Column`/`Row`/`LazyVerticalGrid` |
-| Data binding reativo | `CaosStore` + Combine (`CurrentValueSubject`) | `CaosStore` + Coroutines (`MutableStateFlow`) |
-| Injeção de contexto | `@Environment(\.caosStore)` | `CompositionLocal<CaosStore>` |
-| Tap events | `@Environment(\.caosTapAction)` / `.onCaosTap` | `CompositionLocal` / `LocalCaosTapAction` |
-| Shard desconhecido | `CaosUnknownShardView` (`#if DEBUG`) | `CaosUnknownShardView` (`BuildConfig.DEBUG`) |
-| Loading shimmer | `ShimmerModifier` / `.shimmer()` | `Modifier.caosShimmer()` |
-| CLI de validação | `caos-lint` (SPM executable) | `caos-lint` (Gradle `application`) |
-| UI framework | SwiftUI (MV, sem ViewModel) | Jetpack Compose (mesmo padrão MV) |
-| Distribuição | Swift Package Manager | Maven Central |
-| Schema YAML | v1 compartilhado | v1 compartilhado, byte-a-byte |
+Movida pra [`PARITY.md`](./PARITY.md) — fonte única, também linkada do `README.md`, pra evitar as
+duas tabelas divergirem conforme o projeto evolui além do v1.0.0.
 
 ---
 
