@@ -107,6 +107,7 @@ style:
 
   ForbiddenMethodCall:
     active: true
+    excludes: ['**/caos-lint/**']
     methods:
       - reason: "Não use println() em código de produção — caos-lint é a exceção (CLI de terminal)."
         value: "kotlin.io.println"
