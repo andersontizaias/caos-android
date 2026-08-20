@@ -62,9 +62,9 @@ kover {
     }
 }
 
-// Publicação no Maven Central — credenciais vêm de secrets do GitHub Actions
-// (ver .github/workflows/release.yml), nunca commitadas. `publish` só roda de verdade em CI,
-// no push de uma tag `v*.*.*`.
+// Maven Central publishing — credentials come from GitHub Actions secrets
+// (see .github/workflows/release.yml), never committed. `publish` only actually runs in CI,
+// on a `v*.*.*` tag push.
 mavenPublishing {
     publishToMavenCentral()
     signAllPublications()

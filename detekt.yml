@@ -1,6 +1,6 @@
 # ============================================================
 # Detekt Configuration — Caos Android
-# Documentação: https://detekt.dev/docs/introduction/configurations
+# Docs: https://detekt.dev/docs/introduction/configurations
 # ============================================================
 
 build:
@@ -12,7 +12,7 @@ config:
   warningsAsErrors: false
 
 # ============================================================
-# COMPLEXIDADE
+# COMPLEXITY
 # ============================================================
 complexity:
   active: true
@@ -49,7 +49,7 @@ complexity:
     threshold: 3
 
 # ============================================================
-# ESTILO
+# STYLE
 # ============================================================
 style:
   active: true
@@ -79,9 +79,9 @@ style:
   ForbiddenComment:
     active: true
     comments:
-      - reason: "Resolva os TODOs antes de mergear"
+      - reason: "Resolve TODOs before merging"
         value: 'TODO:'
-      - reason: "Fixmes devem ser resolvidos antes de mergear"
+      - reason: "Fixmes must be resolved before merging"
         value: 'FIXME:'
     allowedPatterns: ''
 
@@ -108,7 +108,7 @@ style:
     active: true
     excludes: ['**/caos-lint/**']
     methods:
-      - reason: "Não use println() em código de produção — caos-lint é a exceção (CLI de terminal)."
+      - reason: "Don't use println() in production code — caos-lint is the exception (terminal CLI)."
         value: "kotlin.io.println"
 
 # ============================================================
@@ -154,8 +154,8 @@ naming:
     privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
     excludeClassPattern: '$^'
 
-# Formatação é responsabilidade do ktlint/Spotless — o ruleset `formatting` do Detekt não é
-# habilitado aqui (exigiria a dependência detektPlugins("...:detekt-formatting:...")).
+# Formatting is ktlint/Spotless's responsibility — Detekt's `formatting` ruleset isn't enabled
+# here (it would require the detektPlugins("...:detekt-formatting:...") dependency).
 
 # ============================================================
 # COROUTINES

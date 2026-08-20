@@ -7,11 +7,11 @@ import java.io.File
 import java.io.IOException
 
 /**
- * Valida um arquivo de schema YAML v1 do Caos e reporta problemas — shard sem `type`, `id`
- * duplicado, warning de shard sem `id`.
+ * Validates a Caos YAML v1 schema file and reports issues — shard missing `type`, duplicate
+ * `id`, warning for a shard with no `id`.
  *
- * [output] recebe cada linha de progresso (`✓ ...`) — por padrão imprime no stdout; testes podem
- * substituir por uma lambda que apenas coleta as linhas, sem precisar capturar `System.out`.
+ * [output] receives each progress line (`✓ ...`) — prints to stdout by default; tests can
+ * substitute a lambda that just collects the lines, without capturing `System.out`.
  */
 @Suppress("NestedBlockDepth")
 public fun lint(

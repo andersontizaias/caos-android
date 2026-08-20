@@ -17,14 +17,14 @@ class CaosUnknownShardViewTest {
 
     @Test
     fun `shows a visible warning for unregistered shard types in debug builds`() {
-        // Esse comportamento só existe no build type debug — pula (não falha) quando rodado
-        // contra a variante release, onde BuildConfig.DEBUG = false.
+        // This behavior only exists in the debug build type — skip (don't fail) when run
+        // against the release variant, where BuildConfig.DEBUG = false.
         assumeTrue(BuildConfig.DEBUG)
 
         composeTestRule.setContent {
             CaosUnknownShardView(type = "Missing")
         }
 
-        composeTestRule.onNodeWithText("⚠ Shard 'Missing' não registrado").assertExists()
+        composeTestRule.onNodeWithText("⚠ Shard 'Missing' not registered").assertExists()
     }
 }

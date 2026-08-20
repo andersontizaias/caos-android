@@ -1,6 +1,6 @@
 package io.github.andersontizaias.caos.core
 
-/** Erros de parsing do schema Caos. */
+/** Errors from parsing the Caos schema. */
 public sealed class CaosError {
     public data object MissingVersion : CaosError()
 
@@ -23,10 +23,10 @@ public sealed class CaosError {
 }
 
 /**
- * Exceção lançada por [CaosParser.parse] quando o YAML é inválido.
+ * Exception thrown by [CaosParser.parse] when the YAML is invalid.
  *
- * `CaosError` é um tipo de dado puro (sem herdar de `Throwable`), então o parser lança esta
- * exceção carregando-o.
+ * `CaosError` is a plain data type (doesn't extend `Throwable`), so the parser throws this
+ * exception carrying it.
  */
 public class CaosParseException(
     public val error: CaosError,

@@ -13,10 +13,10 @@ screens:
       - type: BalanceCard
         id: card_balance
         props:
-          # "id" repetido aqui de propósito: CaosContainerView não injeta o id do shard dentro
-          # de `props` automaticamente, então o shard só consegue disparar onTap com o id certo
-          # se ele mesmo estiver acessível via props.
+          # "id" repeated here on purpose: CaosContainerView doesn't inject the shard's id
+          # into `props` automatically, so the shard can only dispatch onTap with the right
+          # id if it's accessible via props too.
           id: "card_balance"
-          title: "Saldo disponível"
+          title: "Available balance"
           dataKey: "user.balance"
           cornerRadius: 12

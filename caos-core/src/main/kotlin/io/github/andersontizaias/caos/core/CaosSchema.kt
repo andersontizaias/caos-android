@@ -1,6 +1,6 @@
 package io.github.andersontizaias.caos.core
 
-/** Raiz do schema Caos v1. */
+/** Root of the Caos v1 schema. */
 public data class CaosSchema(
     val version: Int,
     val screens: List<CaosScreen>,

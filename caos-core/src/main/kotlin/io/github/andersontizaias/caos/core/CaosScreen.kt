@@ -1,6 +1,6 @@
 package io.github.andersontizaias.caos.core
 
-/** Padding de um container. */
+/** A container's padding. */
 public data class CaosEdgeInsets(
     val top: Double = 0.0,
     val left: Double = 0.0,
@@ -13,10 +13,10 @@ public data class CaosEdgeInsets(
 }
 
 /**
- * Configuração de container de uma tela.
+ * A screen's container configuration.
  *
- * `type` permanece string livre (`"vertical"` | `"horizontal"` | `"grid"`), não enum, para manter
- * paridade direta com o schema YAML.
+ * `type` stays a free-form string (`"vertical"` | `"horizontal"` | `"grid"`), not an enum, to
+ * keep direct parity with the YAML schema.
  */
 public data class CaosContainer(
     val type: String = "vertical",
@@ -24,7 +24,7 @@ public data class CaosContainer(
     val padding: CaosEdgeInsets = CaosEdgeInsets.Zero,
 )
 
-/** Uma tela resolvida do schema Caos. */
+/** A resolved screen from the Caos schema. */
 public data class CaosScreen(
     val id: String = "",
     val containerConfig: CaosContainer = CaosContainer(),

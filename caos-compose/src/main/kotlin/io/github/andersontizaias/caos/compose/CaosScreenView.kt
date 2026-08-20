@@ -27,19 +27,19 @@ import io.github.andersontizaias.caos.core.CaosSchema
 import java.io.IOException
 
 /**
- * Carrega e renderiza uma tela Caos a partir de um arquivo YAML nos assets do app. Quatro
- * estados: carregando / erro / vazio / renderizado.
+ * Loads and renders a Caos screen from a YAML file in the app's assets. Four states: loading /
+ * error / empty / rendered.
  *
- * Uso:
+ * Usage:
  * ```kotlin
  * CaosScreenView(name = "home", store = store) { id, context ->
  *     navigator.push(id)
  * }
  * ```
  *
- * `store` e `onTap` são parâmetros explícitos porque `CompositionLocalProvider` precisa envolver
- * os filhos — não dá pra ser um modifier de cauda — então o composable de topo já recebe os dois
- * diretamente.
+ * `store` and `onTap` are explicit parameters because `CompositionLocalProvider` needs to wrap
+ * its children — it can't be a trailing modifier — so the top-level composable already receives
+ * both directly.
  */
 @Composable
 public fun CaosScreenView(
@@ -67,9 +67,9 @@ public fun CaosScreenView(
         } catch (
             @Suppress("SwallowedException") exception: IOException,
         ) {
-            // Asset ausente vira uma mensagem amigável fixa, não o texto bruto da IOException
-            // da plataforma.
-            parseError = CaosError.InvalidYaml(line = 0, reason = "'$name.yaml' não encontrado nos assets")
+            // A missing asset becomes a fixed, friendly message, not the platform IOException's
+            // raw text.
+            parseError = CaosError.InvalidYaml(line = 0, reason = "'$name.yaml' not found in assets")
         }
     }
 
@@ -102,7 +102,7 @@ private fun EmptyScreenMessage(
     modifier: Modifier = Modifier,
 ) {
     Text(
-        text = "Nenhuma tela encontrada no YAML '$name'",
+        text = "No screen found in YAML '$name'",
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = modifier.padding(SCREEN_MESSAGE_PADDING.dp),

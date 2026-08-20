@@ -13,5 +13,5 @@ screens:
       - type: BalanceCard
         id: card_balance
         props:
-          title: "Saldo disponível"
+          title: "Available balance"
           dataKey: "user.balance"

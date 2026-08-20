@@ -17,9 +17,9 @@ import io.github.andersontizaias.caos.compose.LocalCaosTapAction
 import io.github.andersontizaias.caos.core.CaosProps
 
 /**
- * Shard de exemplo, do Quick Start do README. Registrado no
+ * Example shard, from the README's Quick Start. Registered in
  * [io.github.andersontizaias.caos.compose.CaosStore] via `register(type = "BalanceCard") { ... }`
- * (ver [MainActivity]).
+ * (see [MainActivity]).
  */
 @Composable
 internal fun BalanceCardView(props: CaosProps) {

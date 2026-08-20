@@ -5,27 +5,28 @@ import io.github.andersontizaias.caos.core.CaosProps
 import kotlinx.coroutines.flow.StateFlow
 
 /**
- * Model central da arquitetura Caos (padrão MV, sem ViewModel). Gerencia o registro de shards,
- * providers síncronos e `StateFlow`s reativos.
+ * Central model of the Caos architecture (MV pattern, no ViewModel). Manages shard registration,
+ * synchronous providers, and reactive `StateFlow`s.
  *
- * Em Compose, uma função `@Composable` já é a unidade de composição — todo shard se registra
- * como lambda via [register], sem precisar de um protocolo por tipo nem de reflection.
+ * In Compose, a `@Composable` function is already the unit of composition — every shard
+ * registers as a lambda via [register], with no need for a per-type protocol or reflection.
  */
 public class CaosStore {
     private val shardRegistry = mutableMapOf<String, @Composable (CaosProps) -> Unit>()
 
-    // internal + @PublishedApi: precisam ser visíveis do corpo inline de `resolve` (função
-    // pública reified), inclusive por código de outro módulo que chame `resolve` — inline copia o
-    // corpo da função pro call site, então membros `private` não seriam acessíveis ali.
+    // internal + @PublishedApi: need to be visible from `resolve`'s inline body (a public
+    // reified function), including from code in another module that calls `resolve` — inline
+    // copies the function body to the call site, so `private` members wouldn't be accessible
+    // there.
     @PublishedApi
     internal val providers: MutableMap<String, () -> Any?> = mutableMapOf()
 
     @PublishedApi
     internal val flows: MutableMap<String, StateFlow<Any?>> = mutableMapOf()
 
-    // MARK: - Registro de shards
+    // MARK: - Shard registration
 
-    /** Registra o composable responsável por renderizar shards do tipo [type]. */
+    /** Registers the composable responsible for rendering shards of type [type]. */
     public fun register(
         type: String,
         content: @Composable (props: CaosProps) -> Unit,
@@ -33,7 +34,7 @@ public class CaosStore {
         shardRegistry[type] = content
     }
 
-    /** Renderiza o shard [type]. Se não houver registro, renderiza [CaosUnknownShardView]. */
+    /** Renders the shard [type]. If unregistered, renders [CaosUnknownShardView]. */
     @Composable
     public fun Render(
         type: String,
@@ -47,9 +48,9 @@ public class CaosStore {
         }
     }
 
-    // MARK: - Registro de dados
+    // MARK: - Data registration
 
-    /** Registra um provider síncrono para uma chave. */
+    /** Registers a synchronous provider for a key. */
     public fun register(
         key: String,
         provider: () -> Any?,
@@ -57,7 +58,7 @@ public class CaosStore {
         providers[key] = provider
     }
 
-    /** Registra um `StateFlow` reativo para uma chave. */
+    /** Registers a reactive `StateFlow` for a key. */
     public fun register(
         key: String,
         flow: StateFlow<Any?>,
@@ -65,14 +66,13 @@ public class CaosStore {
         flows[key] = flow
     }
 
-    // MARK: - Resolução
+    // MARK: - Resolution
 
     /**
-     * Resolve o valor atual de uma chave de forma síncrona.
+     * Resolves the current value of a key synchronously.
      *
-     * Providers têm prioridade sobre flows: se uma chave tem provider registrado, o resultado
-     * dele é retornado (convertido ou `null`), mesmo que um flow também exista para a mesma
-     * chave.
+     * Providers take priority over flows: if a key has a registered provider, its result is
+     * returned (converted, or `null`), even if a flow also exists for the same key.
      */
     public inline fun <reified T> resolve(key: String): T? {
         if (providers.containsKey(key)) {
@@ -82,10 +82,11 @@ public class CaosStore {
     }
 
     /**
-     * Retorna o [StateFlow] registrado para [key], tipado como `T`.
+     * Returns the [StateFlow] registered for [key], typed as `T`.
      *
-     * O cast é necessário porque o registro interno é heterogêneo (`StateFlow<Any?>`) — o
-     * chamador é responsável por pedir o mesmo tipo usado no `register(key, flow)` original.
+     * The cast is necessary because the internal registry is heterogeneous (`StateFlow<Any?>`)
+     * — the caller is responsible for requesting the same type used in the original
+     * `register(key, flow)` call.
      */
     @Suppress("UNCHECKED_CAST")
     public fun <T> flowFor(key: String): StateFlow<T?>? = flows[key] as? StateFlow<T?>

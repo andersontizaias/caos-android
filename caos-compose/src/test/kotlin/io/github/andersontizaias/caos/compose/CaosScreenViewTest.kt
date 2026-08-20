@@ -31,7 +31,7 @@ class CaosScreenViewTest {
             CaosScreenView(name = "home", store = store)
         }
 
-        composeTestRule.onNodeWithText("Saldo disponível").assertExists()
+        composeTestRule.onNodeWithText("Available balance").assertExists()
     }
 
     @Test
@@ -40,7 +40,7 @@ class CaosScreenViewTest {
             CaosScreenView(name = "empty_screens", store = CaosStore())
         }
 
-        composeTestRule.onNodeWithText("Nenhuma tela encontrada no YAML 'empty_screens'").assertExists()
+        composeTestRule.onNodeWithText("No screen found in YAML 'empty_screens'").assertExists()
     }
 
     @Test
@@ -50,7 +50,7 @@ class CaosScreenViewTest {
         }
 
         val expectedMessage =
-            CaosError.InvalidYaml(line = 0, reason = "'does_not_exist.yaml' não encontrado nos assets")
+            CaosError.InvalidYaml(line = 0, reason = "'does_not_exist.yaml' not found in assets")
         composeTestRule.onNodeWithText(expectedMessage.message).assertExists()
     }
 

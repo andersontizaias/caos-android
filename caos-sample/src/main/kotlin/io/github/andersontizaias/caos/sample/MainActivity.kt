@@ -12,8 +12,8 @@ import io.github.andersontizaias.caos.compose.CaosScreenView
 import io.github.andersontizaias.caos.compose.CaosStore
 
 /**
- * Quick Start do README: registra o shard `BalanceCard` e a chave de dado `user.balance`, depois
- * renderiza `home.yaml` via [CaosScreenView].
+ * README Quick Start: registers the `BalanceCard` shard and the `user.balance` data key, then
+ * renders `home.yaml` via [CaosScreenView].
  */
 class MainActivity : ComponentActivity() {
     private val store =
