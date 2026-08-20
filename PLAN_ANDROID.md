@@ -1,6 +1,8 @@
 # Caos Android — Plano de Implementação (Jetpack Compose)
 
-> **Status:** Planejado
+> **Status:** Fases 0–6 concluídas — paridade de API com o Swift v1.0.0 alcançada
+> (`caos-core`, `caos-compose`, `caos-lint`, `caos-sample`, CI/CD, docs). Publicação real no Maven
+> Central pendente de secrets que só o usuário pode configurar — ver Fase 5.
 > **Fonte da verdade:** [`andersontizaias/Caos`](https://github.com/andersontizaias/Caos) v1.0.0 (SwiftUI, `Sources/Caos/`)
 > **Este documento substitui** o rascunho anterior em `chaos/PLAN_ANDROID.md`, que presumia uma
 > arquitetura (`NSClassFromString`, dependência `kaml`) que não corresponde à implementação real do
@@ -178,10 +180,11 @@ num emulador (card renderizado + tap disparando `onTap`), não só compilado —
       usuário. `version.txt` (fonte única de verdade, lido em `build.gradle.kts` raiz) já está no
       lugar como pré-requisito, caso queira adicionar depois.
 
-### Fase 6 — Docs e certificação de paridade
-`README.md` espelhando as seções do Swift (Quick Start, YAML Schema Reference, CaosProps API,
-Registering Shards, Data Binding, Tap Events, Loading States, YAML Validation), tabela de paridade
-iOS↔Android, `CHANGELOG.md` com entrada `v1.0.0` alinhada à tag do repo Swift.
+### Fase 6 — Docs e certificação de paridade ✅
+`README.md` espelhando as seções do Swift (Architecture, Requirements, Local Development, Quick
+Start, YAML Schema Reference, CaosProps API, Registering Shards, Data Binding, Tap Events, Loading
+States, YAML Validation, Installation), tabela de paridade iOS↔Android, `CHANGELOG.md` com entrada
+`v1.0.0` — [PR #6](https://github.com/andersontizaias/caos-android/pull/6).
 
 ---
 
