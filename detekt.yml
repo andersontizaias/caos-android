@@ -1,0 +1,170 @@
+# ============================================================
+# Detekt Configuration — Caos Android
+# Equivalente ao SwiftLint/SwiftFormat do repo Caos (iOS)
+# Documentação: https://detekt.dev/docs/introduction/configurations
+# ============================================================
+
+build:
+  maxIssues: 0
+  excludeCorrectable: false
+
+config:
+  validation: true
+  warningsAsErrors: false
+
+# ============================================================
+# COMPLEXIDADE
+# ============================================================
+complexity:
+  active: true
+
+  LongMethod:
+    active: true
+    threshold: 60
+    ignoreAnnotated: ['Composable', 'Preview']
+
+  LongParameterList:
+    active: true
+    functionThreshold: 6
+    constructorThreshold: 7
+    ignoreDefaultParameters: false
+    ignoreDataClasses: true
+    ignoreAnnotated: ['Composable']
+
+  TooManyFunctions:
+    active: true
+    excludes: ['**/test/**', '**/androidTest/**']
+    thresholdInFiles: 20
+    thresholdInClasses: 15
+    thresholdInInterfaces: 10
+    thresholdInObjects: 20
+    thresholdInEnums: 10
+
+  CyclomaticComplexMethod:
+    active: true
+    threshold: 15
+    ignoreSimpleWhenEntries: false
+
+  NamedArguments:
+    active: true
+    threshold: 3
+
+# ============================================================
+# ESTILO
+# ============================================================
+style:
+  active: true
+
+  MagicNumber:
+    active: true
+    ignoreNumbers: ['-1', '0', '1', '2', '100']
+    ignoreHashCodeFunction: true
+    ignorePropertyDeclaration: true
+    ignoreLocalVariableDeclaration: false
+    ignoreConstantDeclaration: true
+    ignoreCompanionObjectPropertyDeclaration: true
+    ignoreAnnotation: true
+    ignoreNamedArgument: true
+    ignoreEnums: true
+    ignoreRanges: false
+    ignoreExtensionFunctions: true
+
+  UnusedImports:
+    active: true
+
+  UnusedPrivateMember:
+    active: true
+    allowedNames: ''
+    ignoreAnnotated: ['Preview']
+
+  ForbiddenComment:
+    active: true
+    comments:
+      - reason: "Resolva os TODOs antes de mergear"
+        value: 'TODO:'
+      - reason: "Fixmes devem ser resolvidos antes de mergear"
+        value: 'FIXME:'
+    allowedPatterns: ''
+
+  MaxLineLength:
+    active: true
+    maxLineLength: 120
+    excludePackageStatements: true
+    excludeImportStatements: true
+    excludeCommentStatements: false
+
+  ReturnCount:
+    active: true
+    max: 4
+    excludedFunctions: ['equals']
+    excludeLabeled: false
+    excludeReturnFromLambda: true
+    excludeGuardClauses: true
+
+  WildcardImport:
+    active: true
+    excludeImports: []
+
+  ForbiddenMethodCall:
+    active: true
+    methods:
+      - reason: "Não use println() em código de produção — caos-lint é a exceção (CLI de terminal)."
+        value: "kotlin.io.println"
+
+# ============================================================
+# POTENTIAL BUGS
+# ============================================================
+potential-bugs:
+  active: true
+
+  LateinitUsage:
+    active: true
+    excludes: ['**/test/**', '**/androidTest/**']
+    ignoreOnClassesPattern: ''
+
+  UnsafeCallOnNullableType:
+    active: true
+    excludes: ['**/test/**']
+
+  UnreachableCode:
+    active: true
+
+# ============================================================
+# NAMING
+# ============================================================
+naming:
+  active: true
+
+  MatchingDeclarationName:
+    active: false
+
+  ClassNaming:
+    active: true
+    classPattern: '[A-Z][a-zA-Z0-9]*'
+
+  FunctionNaming:
+    active: true
+    functionPattern: '([a-z][a-zA-Z0-9]*)|([A-Z][a-zA-Z0-9]*)'
+    excludes: ['**/test/**']
+    ignoreAnnotated: ['Composable']
+
+  VariableNaming:
+    active: true
+    variablePattern: '[a-z][A-Za-z0-9]*'
+    privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
+    excludeClassPattern: '$^'
+
+# Formatação é responsabilidade do ktlint/Spotless — o ruleset `formatting` do Detekt não é
+# habilitado aqui (exigiria a dependência detektPlugins("...:detekt-formatting:...")).
+
+# ============================================================
+# COROUTINES
+# ============================================================
+coroutines:
+  active: true
+  GlobalCoroutineUsage:
+    active: true
+  RedundantSuspendModifier:
+    active: true
+  SuspendFunWithCoroutineScopeReceiver:
+    active: true

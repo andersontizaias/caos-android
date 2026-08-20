@@ -1,0 +1,17 @@
+version: 1
+screens:
+  - id: home
+    container:
+      type: vertical
+      spacing: 16
+      padding:
+        top: 24
+        bottom: 24
+        leading: 16
+        trailing: 16
+    shards:
+      - type: BalanceCard
+        id: card_balance
+        props:
+          title: "Saldo disponível"
+          dataKey: "user.balance"

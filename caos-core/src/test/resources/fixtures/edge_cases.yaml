@@ -1,0 +1,32 @@
+version: 1
+screens:
+  - id: empty_shards
+    container:
+      type: vertical
+      spacing: 0
+      padding:
+        top: 0
+        bottom: 0
+        leading: 0
+        trailing: 0
+    shards: []
+  - id: all_prop_types
+    container:
+      type: grid
+      spacing: 8
+      padding:
+        top: 0
+        bottom: 0
+        leading: 0
+        trailing: 0
+    shards:
+      - type: TestView
+        id: test_1
+        props:
+          stringProp: "hello world"
+          intProp: 42
+          doubleProp: 3.14
+          boolPropTrue: true
+          boolPropFalse: false
+          colorProp: "#FF5500"
+          colorWithAlpha: "#80FF5500"
