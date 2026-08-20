@@ -16,8 +16,8 @@ dependencyResolutionManagement {
 rootProject.name = "caos-android"
 
 include(":caos-core")
+include(":caos-compose")
 
 // Habilitados nas próximas fases (ver PLAN_ANDROID.md):
-// include(":caos-compose")  // Fase 2
 // include(":caos-lint")     // Fase 3
 // include(":caos-sample")   // Fase 4
