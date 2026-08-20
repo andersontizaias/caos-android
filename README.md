@@ -6,14 +6,18 @@
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.3.21-orange)](https://kotlinlang.org)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
 
-**Caos** (**C**onfigurable **A**utomated **O**n-demand **S**creens) é um framework de
-Server-Driven UI para Android que gera telas Jetpack Compose dinamicamente a partir de arquivos
-YAML. Mude sua UI sem redeploy do app.
+<p align="center">
+  <img src="./assets/caos-logo.png" alt="Caos Logo" width="400" />
+</p>
 
-Port em Kotlin/Jetpack Compose de [Caos](https://github.com/andersontizaias/Caos) (SwiftUI) — o
-mesmo arquivo `caos.yaml` funciona nas duas plataformas sem modificação. Veja
-[`PLAN_ANDROID.md`](./PLAN_ANDROID.md) pro mapeamento completo de API Swift → Kotlin e as
-decisões de arquitetura por trás de cada diferença deliberada entre as duas versões.
+**Caos** (**C**onfigurable **A**utomated **O**n-demand **S**creens) is an Android Server-Driven UI
+framework that generates Jetpack Compose screens dynamically from YAML files. Change your UI
+without redeploying your app.
+
+Kotlin/Jetpack Compose port of [Caos](https://github.com/andersontizaias/Caos) (SwiftUI) — the
+same `caos.yaml` file works on both platforms without modification. See
+[`PLAN_ANDROID.md`](./PLAN_ANDROID.md) for the full Swift → Kotlin API mapping and the reasoning
+behind every deliberate difference between the two versions.
 
 ---
 
@@ -48,8 +52,8 @@ flowchart TB
     style SCHEMA fill:#0f3460,stroke:#4a4a8a,color:#e0e0ff
 ```
 
-Caos segue o padrão **MV (Model-View)** — sem ViewModel. `CaosStore` é o Model; composables leem
-dele via `LocalCaosStore.current`.
+Caos follows the **MV (Model-View)** pattern — no ViewModel. `CaosStore` is the Model; composables
+read from it via `LocalCaosStore.current`.
 
 ---
 
@@ -69,14 +73,14 @@ dele via `LocalCaosStore.current`.
 | Dependency | Type | Purpose |
 |---|---|---|
 | Jetpack Compose (runtime/ui/foundation/material3) | AndroidX | Rendering engine |
-| `kotlinx-coroutines-core` | Library | Data binding reativo via `CaosStore` (`StateFlow`) |
-| **Nenhuma dependência de terceiros em `caos-core`** | — | Parser é stdlib-only, zero pacotes externos |
+| `kotlinx-coroutines-core` | Library | Reactive data binding via `CaosStore` (`StateFlow`) |
+| **No third-party dependencies in `caos-core`** | — | Parser is stdlib-only, zero external packages |
 
 ### Local development tools
 
 | Tool | Notes |
 |---|---|
-| Android Studio ou JDK 21 | Ex.: JBR do Android Studio (`/Applications/Android Studio.app/Contents/jbr`) |
+| Android Studio or JDK 21 | E.g. Android Studio's bundled JBR (`/Applications/Android Studio.app/Contents/jbr`) |
 | Android SDK | `compileSdk`/`targetSdk` 36 |
 
 ---
@@ -99,8 +103,8 @@ cd caos-android
 ### 3. Run tests
 
 ```bash
-# ktlint + Spotless + detekt + testes (JVM e Robolectric) + cobertura (Kover, limiar 90%)
-# em todos os módulos — as tasks já se encadeiam automaticamente via `check`
+# ktlint + Spotless + detekt + tests (JVM and Robolectric) + coverage (Kover, 90% threshold)
+# across every module — these tasks already chain automatically via `check`
 ./gradlew check
 ```
 
@@ -110,7 +114,7 @@ cd caos-android
 ./gradlew :caos-sample:installDebug
 ```
 
-Ou abra o projeto no Android Studio e rode a configuração `caos-sample`.
+Or open the project in Android Studio and run the `caos-sample` configuration.
 
 ### 5. Validate a YAML file
 
@@ -122,20 +126,20 @@ Ou abra o projeto no Android Studio e rode a configuração `caos-sample`.
 
 ```
 caos-android/
-├── caos-core/               # Kotlin puro (sem Android) — CaosParser, CaosProps, CaosSchema, CaosShard
+├── caos-core/               # Pure Kotlin (no Android) — CaosParser, CaosProps, CaosSchema, CaosShard
 ├── caos-compose/            # Jetpack Compose — CaosStore, CaosScreenView, CaosContainerView, …
-├── caos-lint/                # CLI de validação (JVM, plugin `application` + `shadow`)
-├── caos-sample/               # App de exemplo — Quick Start abaixo
-├── PLAN_ANDROID.md            # Arquitetura completa e mapeamento Swift → Kotlin
+├── caos-lint/                # Validation CLI (JVM, `application` + `shadow` plugins)
+├── caos-sample/               # Example app — Quick Start below
+├── PLAN_ANDROID.md            # Full architecture and Swift → Kotlin mapping
 ├── .github/workflows/         # ci.yml, lint.yml, release.yml
-└── version.txt                # Fonte única de verdade da versão
+└── version.txt                # Single source of truth for the version
 ```
 
 ---
 
 ## Quick Start
 
-**1. Add YAML** (`home.yaml` em `src/main/assets/`):
+**1. Add YAML** (`home.yaml` in `src/main/assets/`):
 
 ```yaml
 version: 1
@@ -153,16 +157,16 @@ screens:
       - type: BalanceCard
         id: card_balance
         props:
-          # "id" repetido aqui de propósito — nem CaosContainerView (Compose) nem a versão Swift
-          # injetam o id do shard dentro de `props` automaticamente, então o shard só consegue
-          # disparar onTap com o id certo se ele mesmo estiver acessível via props.
+          # "id" repeated here on purpose — neither CaosContainerView (Compose) nor the Swift
+          # version inject the shard's id into `props` automatically, so the shard can only
+          # dispatch onTap with the right id if it's accessible via props too.
           id: "card_balance"
-          title: "Saldo disponível"
+          title: "Available balance"
           dataKey: "user.balance"
           cornerRadius: 12
 ```
 
-**2. Set up sua Activity:**
+**2. Set up your Activity:**
 
 ```kotlin
 class MainActivity : ComponentActivity() {
@@ -186,8 +190,9 @@ class MainActivity : ComponentActivity() {
 }
 ```
 
-Pronto. `CaosScreenView` carrega o YAML dos assets, resolve cada tipo de shard no store e
-renderiza a tela. Veja o módulo [`caos-sample`](./caos-sample) pro exemplo completo, rodável.
+That's it. `CaosScreenView` loads the YAML from assets, resolves each shard type from the store,
+and renders the screen. See the [`caos-sample`](./caos-sample) module for the full, runnable
+example.
 
 ---
 
@@ -195,51 +200,52 @@ renderiza a tela. Veja o módulo [`caos-sample`](./caos-sample) pro exemplo comp
 
 | Field | Type | Required | Description |
 |---|---|---|---|
-| `version` | Int | ✅ | Sempre `1` |
-| `screens` | List | ✅ | Array de definições de tela |
-| `screens[].id` | String | ✅ | Identificador único da tela |
+| `version` | Int | ✅ | Always `1` |
+| `screens` | List | ✅ | Array of screen definitions |
+| `screens[].id` | String | ✅ | Unique screen identifier |
 | `screens[].container.type` | String | ✅ | `vertical` \| `horizontal` \| `grid` |
-| `screens[].container.spacing` | Number | — | Espaço entre shards (dp) |
+| `screens[].container.spacing` | Number | — | Space between shards (dp) |
 | `screens[].container.padding` | Object | — | `top`, `bottom`, `leading`, `trailing` |
-| `screens[].shards` | List | — | Array de definições de shard |
-| `shards[].type` | String | ✅ | Nome do tipo de shard registrado |
-| `shards[].id` | String | — | Identificador único usado em eventos de tap |
-| `shards[].props` | Object | — | Propriedades tipadas passadas pro shard |
+| `screens[].shards` | List | — | Array of shard definitions |
+| `shards[].type` | String | ✅ | Registered shard type name |
+| `shards[].id` | String | — | Unique identifier used in tap events |
+| `shards[].props` | Object | — | Typed properties passed to the shard |
 
-Mesmo schema YAML v1 do repo Swift, sem modificação — ver os fixtures compartilhados em
+Same YAML v1 schema as the Swift repo, with no modification — see the shared fixtures in
 `caos-core/src/test/resources/fixtures/`.
 
 ---
 
 ## CaosProps API
 
-`CaosProps` encapsula o dicionário `props` do YAML e fornece acessores tipados:
+`CaosProps` wraps the YAML `props` dictionary and provides typed accessors:
 
 | Method | Return | Description |
 |---|---|---|
-| `string(key)` | `String?` | Valor string cru |
-| `int(key)` | `Int?` | Valor inteiro |
-| `double(key)` | `Double` | Valor de ponto flutuante; default `0.0` |
-| `bool(key)` | `Boolean?` | Booleano ou string `"true"`/`"false"` |
-| `hexColor(key)` | `String?` | Valida e retorna string hex (`#RGB`, `#RRGGBB`, `#AARRGGBB`) |
-| `nested(key)` | `CaosProps?` | Objeto aninhado |
-| `array(key)` | `List<CaosProps>?` | Array de objetos |
+| `string(key)` | `String?` | Raw string value |
+| `int(key)` | `Int?` | Integer value |
+| `double(key)` | `Double` | Floating-point value; defaults to `0.0` |
+| `bool(key)` | `Boolean?` | Boolean or string `"true"`/`"false"` |
+| `hexColor(key)` | `String?` | Validates and returns a hex string (`#RGB`, `#RRGGBB`, `#AARRGGBB`) |
+| `nested(key)` | `CaosProps?` | Nested object |
+| `array(key)` | `List<CaosProps>?` | Array of objects |
 
-> **Nota:** `hexColor()` valida o formato mas retorna uma `String`. Converter pra
-> `androidx.compose.ui.graphics.Color` é responsabilidade do shard (`Color(android.graphics.Color.parseColor(hex))`).
+> **Note:** `hexColor()` validates the format but returns a `String`. Converting to
+> `androidx.compose.ui.graphics.Color` is the shard's responsibility
+> (`Color(android.graphics.Color.parseColor(hex))`).
 
 ---
 
 ## Registering Shards
 
-Shards são funções `@Composable`. Não existe um protocolo tipo `CaosSwiftUIView` — uma função
-`@Composable` já é a unidade de composição em Compose, então o registro é sempre por lambda.
+Shards are `@Composable` functions. There's no `CaosSwiftUIView`-style protocol — a `@Composable`
+function is already the unit of composition in Compose, so registration is always by lambda.
 
 ```kotlin
 store.register(type = "BalanceCard") { props -> BalanceCardView(props) }
 ```
 
-### Implementando um shard
+### Implementing a shard
 
 ```kotlin
 @Composable
@@ -265,19 +271,19 @@ fun BalanceCardView(props: CaosProps) {
 
 ## Data Binding with CaosStore
 
-### Provider síncrono
+### Synchronous provider
 
 ```kotlin
 store.register(key = "user.balance") { UserSession.formattedBalance }
 ```
 
-### Provider reativo (`StateFlow`)
+### Reactive provider (`StateFlow`)
 
 ```kotlin
 store.register(key = "user.balance", flow = userSession.balanceFlow)
 ```
 
-### Lendo um valor reativo num shard
+### Reading a reactive value in a shard
 
 ```kotlin
 @Composable
@@ -295,17 +301,18 @@ fun LiveBalanceView(props: CaosProps) {
 
 ## Tap Events
 
-Todo shard pode disparar um evento de tap via `LocalCaosTapAction`. O `id` vem do campo `id:` do
-shard no YAML — desde que também esteja repetido dentro de `props:` (ver nota no Quick Start).
+Every shard can dispatch a tap event via `LocalCaosTapAction`. The `id` comes from the shard's
+`id:` field in the YAML — as long as it's also repeated inside `props:` (see the note in Quick
+Start).
 
-**No shard:**
+**In the shard:**
 
 ```kotlin
 val onTap = LocalCaosTapAction.current
 Modifier.clickable { onTap(props.string("id") ?: "", emptyMap()) }
 ```
 
-**Tratando eventos no topo:**
+**Handling events at the top:**
 
 ```kotlin
 CaosScreenView(
@@ -324,10 +331,10 @@ CaosScreenView(
 
 ## Loading States
 
-`CaosScreenView` mostra um `CircularProgressIndicator` enquanto o YAML carrega, depois renderiza a
-tela ou uma mensagem de erro se o parse falhar.
+`CaosScreenView` shows a `CircularProgressIndicator` while the YAML loads, then renders the screen
+or an error message if parsing fails.
 
-Pra mostrar um shimmer de placeholder enquanto seu shard busca dado:
+To show a placeholder shimmer while your shard fetches data:
 
 ```kotlin
 Text(
@@ -344,7 +351,7 @@ Text(
 # Via Gradle
 ./gradlew :caos-lint:run --args="home.yaml"
 
-# Ou o fat jar standalone (anexado a cada GitHub Release)
+# Or the standalone fat jar (attached to every GitHub Release)
 java -jar caos-lint-1.0.0-all.jar home.yaml
 
 # Output
@@ -361,10 +368,10 @@ java -jar caos-lint-1.0.0-all.jar home.yaml
 
 ### Gradle (Maven Central)
 
-> **Status:** o workflow de publicação (`release.yml`) está pronto, mas a publicação de verdade
-> depende de secrets que ainda não existem no repo (conta no Central Portal, namespace verificado,
-> chave GPG — detalhes na Fase 5 do [`PLAN_ANDROID.md`](./PLAN_ANDROID.md)). As coordenadas abaixo
-> são as que serão usadas assim que a primeira release sair.
+> **Status:** the publishing workflow (`release.yml`) is ready, but actual publishing depends on
+> secrets that don't exist in the repo yet (Central Portal account, verified namespace, GPG key —
+> details in Phase 5 of [`PLAN_ANDROID.md`](./PLAN_ANDROID.md)). The coordinates below are the
+> ones that will be used once the first release ships.
 
 ```kotlin
 // settings.gradle.kts
@@ -376,37 +383,37 @@ dependencyResolutionManagement {
 ```
 
 ```kotlin
-// build.gradle.kts (módulo do seu app)
+// build.gradle.kts (your app module)
 dependencies {
     implementation("io.github.andersontizaias:caos-core:1.0.0")
     implementation("io.github.andersontizaias:caos-compose:1.0.0")
 }
 ```
 
-Enquanto isso, use como projeto Gradle local (composite build ou `includeBuild`) apontando pra
-este repositório.
+Until then, consume it as a local Gradle project (composite build or `includeBuild`) pointing at
+this repository.
 
 ---
 
-## Tabela de Paridade iOS vs Android
+## iOS vs Android Parity Table
 
 | Feature | iOS | Android |
 |---|---|---|
-| Parser YAML v1 (zero deps) | `CaosParser.swift` (`YAMLParser`) | `CaosParser.kt` (`CaosYamlParser`) |
-| Propriedades tipadas | `CaosProps` (struct) | `CaosProps` (data class) |
-| Registro de shards | closure explícita (`register(type:factory:)`) | closure explícita (`register(type:content:)`) |
-| Container vertical/horizontal/grid | `LazyVStack`/`LazyHStack`/`LazyVGrid` (+ `ScrollView`) | `LazyColumn`/`LazyRow`/`LazyVerticalGrid` (autoscroll) |
-| Data binding reativo | `CaosStore` + Combine (`CurrentValueSubject`) | `CaosStore` + Coroutines (`MutableStateFlow`) |
-| Injeção de contexto | `@Environment(\.caosStore)` | `CompositionLocal` (`LocalCaosStore`) |
+| YAML v1 parser (zero deps) | `CaosParser.swift` (`YAMLParser`) | `CaosParser.kt` (`CaosYamlParser`) |
+| Typed properties | `CaosProps` (struct) | `CaosProps` (data class) |
+| Shard registration | explicit closure (`register(type:factory:)`) | explicit closure (`register(type:content:)`) |
+| Vertical/horizontal/grid container | `LazyVStack`/`LazyHStack`/`LazyVGrid` (+ `ScrollView`) | `LazyColumn`/`LazyRow`/`LazyVerticalGrid` (self-scrolling) |
+| Reactive data binding | `CaosStore` + Combine (`CurrentValueSubject`) | `CaosStore` + Coroutines (`MutableStateFlow`) |
+| Context injection | `@Environment(\.caosStore)` | `CompositionLocal` (`LocalCaosStore`) |
 | Tap events | `@Environment(\.caosTapAction)` / `.onCaosTap` | `CompositionLocal` (`LocalCaosTapAction`) |
-| Shard desconhecido | `CaosUnknownShardView` (`#if DEBUG`) | `CaosUnknownShardView` (`BuildConfig.DEBUG`) |
+| Unknown shard | `CaosUnknownShardView` (`#if DEBUG`) | `CaosUnknownShardView` (`BuildConfig.DEBUG`) |
 | Loading shimmer | `ShimmerModifier` / `.shimmer()` | `Modifier.caosShimmer()` |
-| CLI de validação | `caos-lint` (SPM executable) | `caos-lint` (Gradle `application` + fat jar) |
-| UI framework | SwiftUI (MV, sem ViewModel) | Jetpack Compose (mesmo padrão MV) |
-| Distribuição | Swift Package Manager | Maven Central (config pronta, publish pendente de secrets) |
-| Schema YAML | v1 compartilhado | v1 compartilhado, byte-a-byte |
+| Validation CLI | `caos-lint` (SPM executable) | `caos-lint` (Gradle `application` + fat jar) |
+| UI framework | SwiftUI (MV, no ViewModel) | Jetpack Compose (same MV pattern) |
+| Distribution | Swift Package Manager | Maven Central (config ready, publish pending secrets) |
+| YAML schema | v1, shared | v1, shared, byte-for-byte |
 
-Mapeamento completo de API, com o raciocínio por trás de cada diferença deliberada, em
+Full API mapping, with the reasoning behind every deliberate difference, in
 [`PLAN_ANDROID.md`](./PLAN_ANDROID.md).
 
 ---
@@ -419,5 +426,4 @@ Mapeamento completo de API, com o raciocínio por trás de cada diferença delib
 
 ## License
 
-Caos Android está disponível sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) pra mais
-informação.
+Caos Android is available under the MIT license. See the [LICENSE](LICENSE) file for more info.
