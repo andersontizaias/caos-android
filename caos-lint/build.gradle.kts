@@ -16,6 +16,14 @@ application {
     mainClass.set("io.github.andersontizaias.caos.lint.MainKt")
 }
 
+// Por padrão a task `run` do plugin `application` usa o diretório do próprio módulo
+// (caos-lint/) como workingDir — então `./gradlew :caos-lint:run --args="home.yaml"` procuraria
+// o arquivo em `caos-lint/home.yaml`, não na raiz do repo, onde o usuário roda o `./gradlew`.
+// Descoberto rodando de verdade em CI (ver .github/workflows/ci.yml), não era óbvio de antemão.
+tasks.named<JavaExec>("run") {
+    workingDir = rootProject.projectDir
+}
+
 // Fat jar autocontido pra distribuição via GitHub Release (ver .github/workflows/release.yml).
 // `java -jar caos-lint-<versão>-all.jar <arquivo.yaml>` — sem precisar do classpath do Gradle.
 // Mantém o classifier "-all" (não vazio): um classifier vazio faria o nome do arquivo colidir
