@@ -14,10 +14,8 @@
 framework that generates Jetpack Compose screens dynamically from YAML files. Change your UI
 without redeploying your app.
 
-Kotlin/Jetpack Compose port of [Caos](https://github.com/andersontizaias/Caos) (SwiftUI) — the
-same `caos.yaml` file works on both platforms without modification. See
-[`PLAN_ANDROID.md`](./PLAN_ANDROID.md) for the full Swift → Kotlin API mapping and the reasoning
-behind every deliberate difference between the two versions.
+See [`PLAN_ANDROID.md`](./PLAN_ANDROID.md) for the full architecture and the reasoning behind
+each design decision.
 
 ---
 
@@ -130,7 +128,7 @@ caos-android/
 ├── caos-compose/            # Jetpack Compose — CaosStore, CaosScreenView, CaosContainerView, …
 ├── caos-lint/                # Validation CLI (JVM, `application` + `shadow` plugins)
 ├── caos-sample/               # Example app — Quick Start below
-├── PLAN_ANDROID.md            # Full architecture and Swift → Kotlin mapping
+├── PLAN_ANDROID.md            # Full architecture documentation
 ├── .github/workflows/         # ci.yml, lint.yml, release.yml
 └── version.txt                # Single source of truth for the version
 ```
@@ -157,9 +155,9 @@ screens:
       - type: BalanceCard
         id: card_balance
         props:
-          # "id" repeated here on purpose — neither CaosContainerView (Compose) nor the Swift
-          # version inject the shard's id into `props` automatically, so the shard can only
-          # dispatch onTap with the right id if it's accessible via props too.
+          # "id" repeated here on purpose — CaosContainerView doesn't inject the shard's id
+          # into `props` automatically, so the shard can only dispatch onTap with the right
+          # id if it's accessible via props too.
           id: "card_balance"
           title: "Available balance"
           dataKey: "user.balance"
@@ -211,8 +209,8 @@ example.
 | `shards[].id` | String | — | Unique identifier used in tap events |
 | `shards[].props` | Object | — | Typed properties passed to the shard |
 
-Same YAML v1 schema as the Swift repo, with no modification — see the shared fixtures in
-`caos-core/src/test/resources/fixtures/`.
+See the fixtures in `caos-core/src/test/resources/fixtures/` for real-world examples of every
+field above.
 
 ---
 
@@ -238,8 +236,8 @@ Same YAML v1 schema as the Swift repo, with no modification — see the shared f
 
 ## Registering Shards
 
-Shards are `@Composable` functions. There's no `CaosSwiftUIView`-style protocol — a `@Composable`
-function is already the unit of composition in Compose, so registration is always by lambda.
+Shards are `@Composable` functions — the unit of composition in Compose already, so there's no
+protocol to conform to. Registration is always by lambda.
 
 ```kotlin
 store.register(type = "BalanceCard") { props -> BalanceCardView(props) }
@@ -398,8 +396,7 @@ this repository.
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines, commit conventions, and setup
-instructions. For a feature-by-feature comparison with the Swift version, see
-[PARITY.md](PARITY.md).
+instructions.
 
 ---
 
