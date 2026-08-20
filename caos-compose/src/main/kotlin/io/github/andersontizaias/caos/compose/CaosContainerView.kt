@@ -14,12 +14,9 @@ import io.github.andersontizaias.caos.core.CaosScreen
 import androidx.compose.foundation.lazy.grid.items as gridItems
 
 /**
- * Renderiza um [CaosScreen] usando containers Compose nativos — espelha `CaosContainerView` do
- * Caos iOS. Escolhe `LazyColumn`/`LazyRow`/`LazyVerticalGrid` conforme `container.type`.
- *
- * Diferença deliberada em relação ao Swift: no SwiftUI, `LazyVStack`/`LazyHStack`/`LazyVGrid` não
- * fazem scroll por conta própria — precisam de um `ScrollView` envolvendo. Em Compose, os três
- * `Lazy*` já são o próprio container de scroll, então não há um `ScrollView` equivalente aqui.
+ * Renderiza um [CaosScreen] usando containers Compose nativos. Escolhe
+ * `LazyColumn`/`LazyRow`/`LazyVerticalGrid` conforme `container.type` — os três já são o próprio
+ * container de scroll, sem precisar de um `ScrollView` explícito envolvendo.
  */
 @Composable
 public fun CaosContainerView(

@@ -3,7 +3,7 @@ package io.github.andersontizaias.caos.lint
 import kotlin.system.exitProcess
 
 /**
- * Entry point do CLI `caos-lint` — espelha a seção `Entry point` do `main.swift`.
+ * Entry point do CLI `caos-lint`.
  *
  * Uso: `caos-lint <arquivo.yaml>`
  */

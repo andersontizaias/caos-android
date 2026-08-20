@@ -70,8 +70,8 @@ class CaosContainerViewTest {
         }
 
         composeTestRule.onNodeWithText("Hi").assertExists()
-        // O aviso de shard desconhecido só existe no build type debug — espelha o `#if DEBUG` do
-        // Swift; ver CaosUnknownShardViewTest para a asserção completa desse comportamento.
+        // O aviso de shard desconhecido só existe no build type debug — ver
+        // CaosUnknownShardViewTest para a asserção completa desse comportamento.
         if (BuildConfig.DEBUG) {
             composeTestRule.onNodeWithText("⚠ Shard 'Unknown' não registrado").assertExists()
         }

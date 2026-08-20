@@ -5,9 +5,6 @@ import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.staticCompositionLocalOf
 
 /**
- * Espelha `@Environment(\.caosStore)` / `.caosStore(_:)` do Caos iOS
- * (Sources/Caos/SwiftUI/CaosEnvironment.swift).
- *
  * `CaosScreenView` provê este valor via [CompositionLocalProvider] para toda a árvore de shards
  * descendente — não há acesso a um [CaosStore] antes de um `CaosScreenView` ser composto.
  */

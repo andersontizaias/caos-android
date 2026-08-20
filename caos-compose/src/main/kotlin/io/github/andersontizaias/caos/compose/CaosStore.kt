@@ -5,14 +5,11 @@ import io.github.andersontizaias.caos.core.CaosProps
 import kotlinx.coroutines.flow.StateFlow
 
 /**
- * Model central da arquitetura Caos (padrão MV, sem ViewModel) — espelha `CaosStore` do Caos iOS
- * (Sources/Caos/Core/CaosStore.swift). Gerencia o registro de shards, providers síncronos e
- * `StateFlow`s reativos no lugar dos `CurrentValueSubject`/Combine do Swift.
+ * Model central da arquitetura Caos (padrão MV, sem ViewModel). Gerencia o registro de shards,
+ * providers síncronos e `StateFlow`s reativos.
  *
- * Diferença deliberada em relação ao Swift: não existe um equivalente a
- * `register<V: CaosSwiftUIView>(type:view:)` (registro por tipo + `init(props:)`/reflection). Em
- * Compose uma função `@Composable` já é a unidade de composição — todo shard se registra como
- * lambda via [register].
+ * Em Compose, uma função `@Composable` já é a unidade de composição — todo shard se registra
+ * como lambda via [register], sem precisar de um protocolo por tipo nem de reflection.
  */
 public class CaosStore {
     private val shardRegistry = mutableMapOf<String, @Composable (CaosProps) -> Unit>()
@@ -36,11 +33,7 @@ public class CaosStore {
         shardRegistry[type] = content
     }
 
-    /**
-     * Renderiza o shard [type]. Se não houver registro, renderiza [CaosUnknownShardView]
-     * — espelha `CaosStore.view(for:props:)`, sem a necessidade de type erasure (`AnyView`)
-     * que o Swift precisa.
-     */
+    /** Renderiza o shard [type]. Se não houver registro, renderiza [CaosUnknownShardView]. */
     @Composable
     public fun Render(
         type: String,
@@ -56,7 +49,7 @@ public class CaosStore {
 
     // MARK: - Registro de dados
 
-    /** Registra um provider síncrono para uma chave — espelha `register(key:provider:)`. */
+    /** Registra um provider síncrono para uma chave. */
     public fun register(
         key: String,
         provider: () -> Any?,
@@ -64,7 +57,7 @@ public class CaosStore {
         providers[key] = provider
     }
 
-    /** Registra um `StateFlow` reativo para uma chave — espelha `register(key:publisher:)`. */
+    /** Registra um `StateFlow` reativo para uma chave. */
     public fun register(
         key: String,
         flow: StateFlow<Any?>,
@@ -77,9 +70,9 @@ public class CaosStore {
     /**
      * Resolve o valor atual de uma chave de forma síncrona.
      *
-     * Providers têm prioridade sobre flows, igual ao Swift: se uma chave tem provider registrado,
-     * o resultado dele é retornado (convertido ou `null`), mesmo que um flow também exista para a
-     * mesma chave.
+     * Providers têm prioridade sobre flows: se uma chave tem provider registrado, o resultado
+     * dele é retornado (convertido ou `null`), mesmo que um flow também exista para a mesma
+     * chave.
      */
     public inline fun <reified T> resolve(key: String): T? {
         if (providers.containsKey(key)) {
@@ -91,9 +84,8 @@ public class CaosStore {
     /**
      * Retorna o [StateFlow] registrado para [key], tipado como `T`.
      *
-     * O cast é necessário porque o registro interno é heterogêneo (`StateFlow<Any?>`) — mesma
-     * limitação que o `AnyPublisher` type-erased do Swift; o chamador é responsável por pedir o
-     * tipo correto (o mesmo usado no `register(key:flow:)` original).
+     * O cast é necessário porque o registro interno é heterogêneo (`StateFlow<Any?>`) — o
+     * chamador é responsável por pedir o mesmo tipo usado no `register(key, flow)` original.
      */
     @Suppress("UNCHECKED_CAST")
     public fun <T> flowFor(key: String): StateFlow<T?>? = flows[key] as? StateFlow<T?>

@@ -27,9 +27,8 @@ import io.github.andersontizaias.caos.core.CaosSchema
 import java.io.IOException
 
 /**
- * Carrega e renderiza uma tela Caos a partir de um arquivo YAML nos assets do app — espelha
- * `CaosScreenView` do Caos iOS (Sources/Caos/SwiftUI/CaosScreenView.swift). Mesmos 4 estados:
- * carregando / erro / vazio / renderizado.
+ * Carrega e renderiza uma tela Caos a partir de um arquivo YAML nos assets do app. Quatro
+ * estados: carregando / erro / vazio / renderizado.
  *
  * Uso:
  * ```kotlin
@@ -38,10 +37,9 @@ import java.io.IOException
  * }
  * ```
  *
- * Diferença deliberada em relação ao Swift: `store` e `onTap` são parâmetros explícitos aqui, em
- * vez de modifiers encadeados (`.caosStore(_:)` / `.onCaosTap { }`) — em Compose,
- * `CompositionLocalProvider` precisa envolver os filhos, não pode ser um modifier de cauda, então
- * o composable de topo já recebe os dois diretamente.
+ * `store` e `onTap` são parâmetros explícitos porque `CompositionLocalProvider` precisa envolver
+ * os filhos — não dá pra ser um modifier de cauda — então o composable de topo já recebe os dois
+ * diretamente.
  */
 @Composable
 public fun CaosScreenView(
@@ -69,8 +67,8 @@ public fun CaosScreenView(
         } catch (
             @Suppress("SwallowedException") exception: IOException,
         ) {
-            // Espelha o caminho `bundle.path(forResource:) == nil` do Swift: asset ausente vira
-            // uma mensagem amigável fixa, não o texto bruto da IOException da plataforma.
+            // Asset ausente vira uma mensagem amigável fixa, não o texto bruto da IOException
+            // da plataforma.
             parseError = CaosError.InvalidYaml(line = 0, reason = "'$name.yaml' não encontrado nos assets")
         }
     }
